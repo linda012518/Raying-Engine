@@ -10,4 +10,4 @@
 	#error Raying only supports Windows!
 #endif // Raying_Platform_Windows
 
-
+#define BIT(x) (1 << x)

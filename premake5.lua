@@ -18,6 +18,9 @@ project "Raying"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "hzpch.h"
+	pchsource "Raying/src/hzpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -26,6 +29,7 @@ project "Raying"
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include"
 	}
 
@@ -79,6 +83,11 @@ project "Sandbox"
 		"Raying/src"
 	}
 
+	links
+	{
+		"Raying"
+	}
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
@@ -87,11 +96,6 @@ project "Sandbox"
 		defines
 		{
 			"Raying_Platform_Windows"
-		}
-
-		links
-		{
-			"Raying"
 		}
 
 	filter "configurations:Debug"
