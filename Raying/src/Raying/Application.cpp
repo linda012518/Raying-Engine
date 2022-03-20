@@ -1,21 +1,31 @@
 #include "hzpch.h"
 #include "Application.h"
 
-#include "Events/ApplicationEvent.h"
 #include "Log.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Raying
 {
+	#define Bind_Event_Fn(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 	Application::Application()
 	{
 		_window = std::unique_ptr<Window>(Window::Create());
+		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
 	}
 
 	Application::~Application()
 	{
 
+	}
+
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_Fn(OnWindowClose));
+
+		Ray_Core_Trace("{0}", e);
 	}
 
 	void Application::Run()
@@ -28,5 +38,10 @@ namespace Raying
 		}
 	}
 
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		_running = false;
+		return true;
+	}
 
 }
