@@ -10,6 +10,12 @@ workspace "Raying Engine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
+
+include "Raying/vendor/GLFW" --Include GLFW premake5.lua
+
 project "Raying"
 	location "Raying"
 	kind "SharedLib"
@@ -30,7 +36,14 @@ project "Raying"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links 
+	{ 
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

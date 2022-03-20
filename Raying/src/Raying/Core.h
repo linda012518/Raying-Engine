@@ -10,4 +10,12 @@
 	#error Raying only supports Windows!
 #endif // Raying_Platform_Windows
 
+#ifdef HZ_ENABLE_ASSERTS
+	#define Raying_Assert(x, ...) { if(!(x)) { Ray_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define Raying_Core_Assert(x, ...) { if(!(x)) { Ray_Core_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#else
+	#define Raying_Assert(x, ...)
+	#define Raying_Core_Assert(x, ...)
+#endif
+
 #define BIT(x) (1 << x)

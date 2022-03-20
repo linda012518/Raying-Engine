@@ -4,11 +4,13 @@
 #include "Events/ApplicationEvent.h"
 #include "Log.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Raying
 {
 	Application::Application()
 	{
-
+		_window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -18,14 +20,11 @@ namespace Raying
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
-		if (e.IsInCategory(EventCategoryApplication))
-			Ray_Trace(e);
-		if (e.IsInCategory(EventCategoryInput))
-			Ray_Trace(e);
-		while (true)
+		while (_running)
 		{
-
+			glClearColor(0, 0.3f, 0, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+			_window->OnUpdate();
 		}
 	}
 
