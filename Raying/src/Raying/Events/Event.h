@@ -37,8 +37,10 @@ namespace Raying {
 
 	class Raying_API Event
 	{
-		friend class EventDispatcher;//EventDispatcher是Event的好朋友，那么EventDispatcher可以访问Event的私友函数或变量
+		//friend class EventDispatcher;//EventDispatcher是Event的好朋友，那么EventDispatcher可以访问Event的私友函数或变量
 	public:
+		bool Handled = false;
+
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
@@ -48,8 +50,6 @@ namespace Raying {
 		{
 			return GetCategoryFlags() & category;
 		}
-	protected:
-		bool m_Handled = false;
 	};
 
 	class EventDispatcher
@@ -67,7 +67,7 @@ namespace Raying {
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.Handled = func(*(T*)&m_Event);
 				return true;
 			}
 			return false;

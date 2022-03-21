@@ -64,12 +64,17 @@ project "Raying"
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
+		buildoptions "/MDd"
 		symbols "On"
+
 	filter "configurations:Release"
 		defines "Raying_Release"
+		buildoptions "/MD"
 		optimize "On"
+
 	filter "configurations:Dist"
 		defines "Raying_Dist"
+		buildoptions "/MD"
 		optimize "On"
 	
 	--filter {"system:windows", "configurations:Release"}
@@ -113,10 +118,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
+		buildoptions "/MDd"
 		symbols "On"
+
 	filter "configurations:Release"
 		defines "Raying_Release"
+		buildoptions "/MD"
 		optimize "On"
+
 	filter "configurations:Dist"
 		defines "Raying_Dist"
+		buildoptions "/MD"
 		optimize "On"

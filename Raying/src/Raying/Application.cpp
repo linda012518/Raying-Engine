@@ -20,12 +20,27 @@ namespace Raying
 
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		_layerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		_layerStack.PushOverlay(layer);
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_Fn(OnWindowClose));
 
-		Ray_Core_Trace("{0}", e);
+		for (auto itr = _layerStack.end(); itr != _layerStack.begin(); )
+		{
+			(*--itr)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
 	}
 
 	void Application::Run()
@@ -34,6 +49,10 @@ namespace Raying
 		{
 			glClearColor(0, 0.3f, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : _layerStack)
+				layer->OnUpdate();
+
 			_window->OnUpdate();
 		}
 	}
