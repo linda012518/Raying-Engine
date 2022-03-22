@@ -5,6 +5,8 @@
 #include "Raying/Events/MouseEvent.h"
 #include "Raying/Events/KeyEvent.h"
 
+#include <glad/glad.h>
+
 namespace Raying
 {
 	static bool s_GLFWInitialized = false;
@@ -41,7 +43,7 @@ namespace Raying
 		{
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			Raying_Core_Assert(success, "Could not intialize GLFW!");
+			Ray_Core_Assert(success, "Could not intialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
@@ -49,6 +51,10 @@ namespace Raying
 
 		_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(_window);
+
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		Ray_Core_Assert(status, "Failed to initialize Glad!");
+
 		glfwSetWindowUserPointer(_window, &_data);
 		SetVSync(true);
 

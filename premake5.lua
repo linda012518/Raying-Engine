@@ -13,8 +13,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
 
 include "Raying/vendor/GLFW" --Include GLFW premake5.lua
+include "Raying/vendor/GLAD" --Include GLFW premake5.lua
 
 project "Raying"
 	location "Raying"
@@ -37,12 +39,14 @@ project "Raying"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}"
 	}
 
 	links 
 	{ 
 		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 
@@ -54,7 +58,8 @@ project "Raying"
 		defines
 		{
 			"Raying_Platform_Windows",
-			"Raying_Build_Dll"
+			"Raying_Build_Dll",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
