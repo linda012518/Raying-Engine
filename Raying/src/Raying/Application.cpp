@@ -9,8 +9,13 @@ namespace Raying
 {
 	#define Bind_Event_Fn(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	Application* Application::_instance = nullptr;
+
 	Application::Application()
 	{
+		Ray_Core_Assert(!_instance, "Application alread exists!");
+		_instance = this;
+
 		_window = std::unique_ptr<Window>(Window::Create());
 		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
 	}
@@ -23,11 +28,13 @@ namespace Raying
 	void Application::PushLayer(Layer* layer)
 	{
 		_layerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		_layerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)

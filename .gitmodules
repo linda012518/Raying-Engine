@@ -4,3 +4,6 @@
 [submodule "Raying/vendor/GLFW"]
 	path = Raying/vendor/GLFW
 	url = https://github.com/TheCherno/glfw
+[submodule "Raying/vendor/imgui"]
+	path = Raying/vendor/imgui
+	url = https://github.com/TheCherno/imgui

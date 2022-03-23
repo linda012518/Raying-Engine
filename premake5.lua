@@ -14,9 +14,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
+IncludeDir["ImGui"] = "Raying/vendor/imgui"
 
 include "Raying/vendor/GLFW" --Include GLFW premake5.lua
-include "Raying/vendor/GLAD" --Include GLFW premake5.lua
+include "Raying/vendor/GLAD" 
+include "Raying/vendor/imgui"
 
 project "Raying"
 	location "Raying"
@@ -40,13 +42,15 @@ project "Raying"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}"
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links 
 	{ 
 		"GLFW",
 		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 
