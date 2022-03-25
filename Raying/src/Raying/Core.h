@@ -19,3 +19,5 @@
 #endif
 
 #define BIT(x) (1 << x)
+
+#define Ray_Bind_Event_Fn(fn) std::bind(&fn, this, std::placeholders::_1)
