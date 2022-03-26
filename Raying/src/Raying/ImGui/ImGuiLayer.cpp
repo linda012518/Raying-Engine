@@ -82,14 +82,14 @@ namespace Raying
 	{
 		EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<MouseButtonPressedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnMouseButtonPressedEvent));
-		dispatcher.Dispatch<MouseButtonReleasedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnMouseButtonReleasedEvent));
-		dispatcher.Dispatch<MouseMovedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnMouseMovedEvent));
-		dispatcher.Dispatch<MouseScrolledEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnMouseScrolledEvent));
-		dispatcher.Dispatch<KeyPressedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnKeyPressedEvent));
-		dispatcher.Dispatch<KeyTypedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnKeyTypedEvent));
-		dispatcher.Dispatch<KeyReleasedEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnKeyReleasedEvent));
-		dispatcher.Dispatch<WindowResizeEvent>(Ray_Bind_Event_Fn(ImGuiLayer::OnWindowResizeEvent));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnMouseButtonPressedEvent));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnMouseButtonReleasedEvent));
+		dispatcher.Dispatch<MouseMovedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnMouseMovedEvent));
+		dispatcher.Dispatch<MouseScrolledEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnMouseScrolledEvent));
+		dispatcher.Dispatch<KeyPressedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnKeyPressedEvent));
+		dispatcher.Dispatch<KeyTypedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnKeyTypedEvent));
+		dispatcher.Dispatch<KeyReleasedEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnKeyReleasedEvent));
+		dispatcher.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(ImGuiLayer::OnWindowResizeEvent));
 
 	}
 

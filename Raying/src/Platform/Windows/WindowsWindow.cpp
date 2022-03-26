@@ -13,7 +13,7 @@ namespace Raying
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		Ray_Core_Error("GLFW Error ({0}) : {1}", error, description);
+		Raying_Core_Error("GLFW Error ({0}) : {1}", error, description);
 	}
 
 	Window* Window::Create(const WindowProps& props)
@@ -37,13 +37,13 @@ namespace Raying
 		_data.Width = props.Width;
 		_data.Height = props.Height;
 
-		Ray_Core_Info("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		Raying_Core_Info("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			Ray_Core_Assert(success, "Could not intialize GLFW!");
+			Raying_Core_Assert(success, "Could not intialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
@@ -53,7 +53,7 @@ namespace Raying
 		glfwMakeContextCurrent(_window);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		Ray_Core_Assert(status, "Failed to initialize Glad!");
+		Raying_Core_Assert(status, "Failed to initialize Glad!");
 
 		glfwSetWindowUserPointer(_window, &_data);
 		SetVSync(true);

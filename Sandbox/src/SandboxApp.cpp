@@ -11,12 +11,12 @@ public:
 
 	void OnUpdate() override
 	{
-		Ray_Info("ExampleLayer::Update");
+		Raying_Info("ExampleLayer::Update");
 	}
 
 	void OnEvent(Raying::Event& event) override
 	{
-		Ray_Trace("{0}", event);
+		Raying_Trace("{0}", event);
 	}
 
 };

@@ -24,6 +24,7 @@ project "Raying"
 	location "Raying"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -56,8 +57,7 @@ project "Raying"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
-		systemversion "10.0.17763.0"
+		systemversion "latest"
 
 		defines
 		{
@@ -73,17 +73,17 @@ project "Raying"
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "Raying_Release"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "Raying_Dist"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 	
 	--filter {"system:windows", "configurations:Release"}
@@ -92,8 +92,8 @@ project "Raying"
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -117,8 +117,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
-		systemversion "10.0.17763.0"
+		systemversion "latest"
 
 		defines
 		{
@@ -127,15 +126,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "Raying_Release"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "Raying_Dist"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"

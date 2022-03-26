@@ -13,7 +13,7 @@ namespace Raying
 
 	Application::Application()
 	{
-		Ray_Core_Assert(!_instance, "Application alread exists!");
+		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
 
 		_window = std::unique_ptr<Window>(Window::Create());
