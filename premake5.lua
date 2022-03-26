@@ -1,5 +1,6 @@
 workspace "Raying Engine"
 	architecture "x64"
+	startproject "Sandbox"
 	
 	configurations
 	{
@@ -19,8 +20,6 @@ IncludeDir["ImGui"] = "Raying/vendor/imgui"
 include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 include "Raying/vendor/GLAD" 
 include "Raying/vendor/imgui"
-
-startproject "Sandbox"
 
 project "Raying"
 	location "Raying"
