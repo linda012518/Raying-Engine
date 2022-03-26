@@ -20,6 +20,8 @@ include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 include "Raying/vendor/GLAD" 
 include "Raying/vendor/imgui"
 
+startproject "Sandbox"
+
 project "Raying"
 	location "Raying"
 	kind "SharedLib"
