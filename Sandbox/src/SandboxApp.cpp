@@ -11,12 +11,19 @@ public:
 
 	void OnUpdate() override
 	{
-		Raying_Info("ExampleLayer::Update");
+		if (Raying::Input::IsKeyPressed(RAYING_KEY_TAB))
+			Raying_Trace("Tab key is pressed (poll) !");
 	}
 
 	void OnEvent(Raying::Event& event) override
 	{
-		Raying_Trace("{0}", event);
+		if (event.GetEventType() == Raying::EventType::KeyPressed)
+		{
+			Raying::KeyPressedEvent& e = (Raying::KeyPressedEvent&)event;
+			if (Raying::Input::IsKeyPressed(RAYING_KEY_TAB))
+				Raying_Trace("Tab key is pressed (event) !");
+			Raying_Trace("{0}", (char)e.GetKeyCode());
+		}
 	}
 
 };
