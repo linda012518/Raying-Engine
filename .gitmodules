@@ -7,3 +7,6 @@
 [submodule "Raying/vendor/imgui"]
 	path = Raying/vendor/imgui
 	url = https://github.com/TheCherno/imgui
+[submodule "Raying/vendor/glm"]
+	path = Raying/vendor/glm
+	url = https://github.com/g-truc/glm

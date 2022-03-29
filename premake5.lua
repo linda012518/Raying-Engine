@@ -16,6 +16,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Raying/vendor/imgui"
+IncludeDir["glm"] = "Raying/vendor/glm"
 
 include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 include "Raying/vendor/GLAD" 
@@ -36,7 +37,9 @@ project "Raying"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/**.hpp",
+		"%{prj.name}/vendor/glm/**.inl"
 	}
 
 	includedirs
@@ -45,7 +48,8 @@ project "Raying"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links 
@@ -108,7 +112,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Raying/vendor/spdlog/include",
-		"Raying/src"
+		"Raying/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
