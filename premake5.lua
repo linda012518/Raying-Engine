@@ -113,6 +113,7 @@ project "Sandbox"
 	{
 		"Raying/vendor/spdlog/include",
 		"Raying/src",
+		"Raying/vendor",
 		"%{IncludeDir.glm}"
 	}
 

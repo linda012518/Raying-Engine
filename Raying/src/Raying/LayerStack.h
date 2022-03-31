@@ -23,7 +23,7 @@ namespace Raying
 
 	private:
 		std::vector<Layer*> _layers;
-		std::vector<Layer*>::iterator _layerInsert;
+		unsigned int _layerInsert = 0;
 	};
 }
 

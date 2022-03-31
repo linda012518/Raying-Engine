@@ -7,6 +7,8 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "ImGui/ImGuiLayer.h"
+
 namespace Raying {
 
 	class Raying_API Application
@@ -29,6 +31,7 @@ namespace Raying {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> _window;//unique_ptr 独占所指向的对象
+		ImGuiLayer* _imguiLayer;
 		bool _running = true;
 		LayerStack _layerStack;
 

@@ -5,7 +5,7 @@ namespace Raying
 {
 	LayerStack::LayerStack()
 	{
-		_layerInsert = _layers.begin();
+
 	}
 
 	LayerStack::~LayerStack()
@@ -16,7 +16,8 @@ namespace Raying
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		_layerInsert = _layers.emplace(_layerInsert, layer);
+		_layers.emplace(_layers.begin() + _layerInsert, layer);
+		_layerInsert++;
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)

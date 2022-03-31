@@ -1,6 +1,8 @@
 
 #include <Raying.h>
 
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Raying::Layer
 {
 public:
@@ -14,6 +16,13 @@ public:
 		if (Raying::Input::IsKeyPressed(RAYING_KEY_TAB))
 			Raying_Trace("Tab key is pressed (poll) !");
 	}
+
+	//void OnImGuiRender() override
+	//{
+	//	ImGui::Begin("Test!!!");
+	//	ImGui::Text("Hello My Raying Engine!!!");
+	//	ImGui::End();
+	//}
 
 	void OnEvent(Raying::Event& event) override
 	{
@@ -34,7 +43,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Raying::ImGuiLayer());
 	}
 
 	~Sandbox()

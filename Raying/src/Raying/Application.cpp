@@ -18,6 +18,9 @@ namespace Raying
 
 		_window = std::unique_ptr<Window>(Window::Create());
 		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
+
+		_imguiLayer = new ImGuiLayer();
+		PushLayer(_imguiLayer);
 	}
 
 	Application::~Application()
@@ -59,6 +62,11 @@ namespace Raying
 
 			for (Layer* layer : _layerStack)
 				layer->OnUpdate();
+
+			_imguiLayer->Begin();
+			for (Layer* layer : _layerStack)
+				layer->OnImGuiRender();
+			_imguiLayer->End();
 
 			_window->OnUpdate();
 		}

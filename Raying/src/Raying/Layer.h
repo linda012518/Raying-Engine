@@ -14,6 +14,7 @@ namespace Raying
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate() {}
+		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}
 		
 		inline const std::string& GetName() const { return _debugName; }
