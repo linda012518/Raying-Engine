@@ -24,9 +24,10 @@ include "Raying/vendor/imgui"
 
 project "Raying"
 	location "Raying"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -40,6 +41,11 @@ project "Raying"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/**.hpp",
 		"%{prj.name}/vendor/glm/**.inl"
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -61,7 +67,6 @@ project "Raying"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -71,34 +76,35 @@ project "Raying"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
+		--postbuildcommands
+		--{
+		--	("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+		--}
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "Raying_Release"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "Raying_Dist"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 	
 	--filter {"system:windows", "configurations:Release"}
-		--buildoptions "/MT" 多线程调试MD/MT
+		--buildoptions "/MDd" --多线程调试MD/MT
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -123,7 +129,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -134,14 +139,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "Raying_Debug"
 		runtime "Debug"
-		symbols "On"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "Raying_Release"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "Raying_Dist"
 		runtime "Release"
-		optimize "On"
+		optimize "on"

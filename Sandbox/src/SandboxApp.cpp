@@ -17,12 +17,12 @@ public:
 			Raying_Trace("Tab key is pressed (poll) !");
 	}
 
-	//void OnImGuiRender() override
-	//{
-	//	ImGui::Begin("Test!!!");
-	//	ImGui::Text("Hello My Raying Engine!!!");
-	//	ImGui::End();
-	//}
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Test!!!");
+		ImGui::Text("Hello My Raying Engine!!!");
+		ImGui::End();
+	}
 
 	void OnEvent(Raying::Event& event) override
 	{
