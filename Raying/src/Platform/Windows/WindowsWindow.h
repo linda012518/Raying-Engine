@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Raying/Window.h"
+#include "Raying/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -27,6 +28,7 @@ namespace Raying
 		virtual void Shutdown();
 	private:
 		GLFWwindow* _window;
+		GraphicsContext* _context;
 
 		struct WindowData
 		{

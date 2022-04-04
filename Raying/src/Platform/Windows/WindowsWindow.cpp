@@ -5,7 +5,7 @@
 #include "Raying/Events/MouseEvent.h"
 #include "Raying/Events/KeyEvent.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Raying
 {
@@ -50,10 +50,9 @@ namespace Raying
 		}
 
 		_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(_window);
 
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		Raying_Core_Assert(status, "Failed to initialize Glad!");
+		_context = new OpenGLContext(_window);
+		_context->Init();
 
 		glfwSetWindowUserPointer(_window, &_data);
 		SetVSync(true);
@@ -158,7 +157,7 @@ namespace Raying
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(_window);
+		_context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
