@@ -35,6 +35,7 @@ namespace Raying {
 		bool _running = true;
 		LayerStack _layerStack;
 
+		unsigned int _vao, _vbo, _ibo;
 	private:
 		static Application* _instance;
 	};
