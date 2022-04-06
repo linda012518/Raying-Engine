@@ -8,6 +8,7 @@
 #include "Events/ApplicationEvent.h"
 
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Shader.h"
 
 namespace Raying {
 
@@ -36,6 +37,7 @@ namespace Raying {
 		LayerStack _layerStack;
 
 		unsigned int _vao, _vbo, _ibo;
+		std::unique_ptr<Shader> _shader;
 	private:
 		static Application* _instance;
 	};
