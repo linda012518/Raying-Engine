@@ -18,9 +18,12 @@ IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Raying/vendor/imgui"
 IncludeDir["glm"] = "Raying/vendor/glm"
 
-include "Raying/vendor/GLFW" --Include GLFW premake5.lua
-include "Raying/vendor/GLAD" 
-include "Raying/vendor/imgui"
+group "Dependencies"
+	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
+	include "Raying/vendor/GLAD" 
+	include "Raying/vendor/imgui"
+
+group ""
 
 project "Raying"
 	location "Raying"
