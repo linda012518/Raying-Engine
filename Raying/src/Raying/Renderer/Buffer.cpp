@@ -16,7 +16,9 @@ namespace Raying {
 			case RendererAPI::OpenGL:
 				return new OpenGLVertexBuffer(vertices, size);
 		}
+
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
+		return nullptr;
 	}
 
 	IndexBuffer * IndexBuffer::Create(uint32_t * indices, uint32_t size)
@@ -29,7 +31,9 @@ namespace Raying {
 			case RendererAPI::OpenGL:
 				return new OpenGLIndexBuffer(indices, size);
 		}
+
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
+		return nullptr;
 	}
 
 }
