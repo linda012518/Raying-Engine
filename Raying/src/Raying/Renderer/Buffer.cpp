@@ -10,10 +10,10 @@ namespace Raying {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
-			case RendererAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				return new OpenGLVertexBuffer(vertices, size);
 		}
 
@@ -25,10 +25,10 @@ namespace Raying {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
-			case RendererAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 				return new OpenGLIndexBuffer(indices, size);
 		}
 

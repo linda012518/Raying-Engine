@@ -1,7 +1,7 @@
 #include "hzpch.h"
 #include "Application.h"
-
 #include "Log.h"
+#include "Renderer/Renderer.h"
 
 #include <glad/glad.h>
 
@@ -160,17 +160,18 @@ namespace Raying
 	{
 		while (_running)
 		{
-			glClearColor(0, 0.3f, 0, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RendererCommand::SetClearColor({ 0, 0.3f, 0, 1 });
+			RendererCommand::Clear();
+
+			Renderer::BeginScene();
 
 			_blueShader->Bind();
-			_blue_vao->Bind();
-			glDrawElements(GL_TRIANGLES, _blue_vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-			_vao->Bind();
+			Renderer::Submit(_blue_vao);
 			_shader->Bind();
-			glDrawElements(GL_TRIANGLES, _vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(_vao);
 
+			Renderer::EndScene();
+			
 			for (Layer* layer : _layerStack)
 				layer->OnUpdate();
 

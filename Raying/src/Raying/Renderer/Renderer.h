@@ -1,21 +1,19 @@
 #pragma once
 
 #include "Raying/Core.h"
+#include "RendererCommand.h"
 
 namespace Raying {
-
-	enum class Raying_API RendererAPI
-	{
-		None = 0, OpenGL = 1
-	};
 
 	class Raying_API Renderer
 	{
 	public:
-		inline static RendererAPI GetAPI() { return _rendererAPI; }
+		static void BeginScene();
+		static void EndScene();
 
-	private:
-		static RendererAPI _rendererAPI;
+		static void Submit(const std::shared_ptr<VertexArray>& vetrexArray);
+
+		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
 
 }
