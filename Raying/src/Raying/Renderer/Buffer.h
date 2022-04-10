@@ -130,7 +130,7 @@ namespace Raying {
 	class Raying_API VertexBuffer
 	{
 	public:
-		~VertexBuffer() {}
+		~VertexBuffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -144,7 +144,7 @@ namespace Raying {
 	class Raying_API IndexBuffer
 	{
 	public:
-		~IndexBuffer() {}
+		~IndexBuffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;

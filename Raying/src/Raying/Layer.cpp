@@ -7,10 +7,4 @@ namespace Raying
 	{
 
 	}
-
-	Layer::~Layer()
-	{
-
-	}
-
 }
