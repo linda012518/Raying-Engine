@@ -11,27 +11,6 @@ namespace Raying
 
 	Application* Application::_instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case ShaderDataType::Float:    return GL_FLOAT;
-			case ShaderDataType::Float2:   return GL_FLOAT;
-			case ShaderDataType::Float3:   return GL_FLOAT;
-			case ShaderDataType::Float4:   return GL_FLOAT;
-			case ShaderDataType::Mat3:     return GL_FLOAT;
-			case ShaderDataType::Mat4:     return GL_FLOAT;
-			case ShaderDataType::Int:      return GL_INT;
-			case ShaderDataType::Int2:     return GL_INT;
-			case ShaderDataType::Int3:     return GL_INT;
-			case ShaderDataType::Int4:     return GL_INT;
-			case ShaderDataType::Bool:     return GL_BOOL;
-		}
-
-		Raying_Core_Assert(false, "Unknown ShaderDataType!");
-		return 0;
-	}
-
 	Application::Application()
 	{
 		Raying_Core_Assert(!_instance, "Application alread exists!");
@@ -43,9 +22,7 @@ namespace Raying
 		_imguiLayer = new ImGuiLayer();
 		PushLayer(_imguiLayer);
 
-		glGenVertexArrays(1, &_vao);
-		glBindVertexArray(_vao);
-
+		_vao.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -53,30 +30,41 @@ namespace Raying
 			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
 
-		_vbo.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> vbo;
+		vbo.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		BufferLayout layout = {
+			{ShaderAttribute::Color, ShaderDataType::Float4},
+			{ShaderAttribute::Position, ShaderDataType::Float3}
+		};
+		vbo->SetLayout(layout);
+		_vao->AddVertexBuffer(vbo);
 
-		{
-			BufferLayout layout = {
-				{ShaderAttribute::Color, ShaderDataType::Float4},
-				{ShaderAttribute::Position, ShaderDataType::Float3}
-			};
-			_vbo->SetLayout(layout);
-		}
-
-		const BufferLayout& layout = _vbo->GetLayout();
-		for (const BufferElement& element : layout)
-		{
-			glEnableVertexAttribArray(element.Index);
-			glVertexAttribPointer(
-				element.Index, element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type), 
-				element.Normalized ? GL_TRUE : GL_FALSE, 
-				layout.GetStride(), (const void*)element.Offset);
-		}
+		unsigned int indices[3] = { 0, 1, 2 };
+		std::shared_ptr<IndexBuffer> ibo;
+		ibo.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		_vao->SetIndexBuffer(ibo);
 
 
-		unsigned int indices[3] = {0, 1, 2};
-		_ibo.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		_blue_vao.reset(VertexArray::Create());
+		float blue[3 * 4] = {
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.70f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f
+		};
+		std::shared_ptr<VertexBuffer> vbo2;
+		vbo2.reset(VertexBuffer::Create(blue, sizeof(blue)));
+		BufferLayout layout2 = {
+			{ShaderAttribute::Position, ShaderDataType::Float3}
+		};
+		vbo2->SetLayout(layout2);
+		_blue_vao->AddVertexBuffer(vbo2);
+
+		unsigned int blueIndex[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> ibo2;
+		ibo2.reset(IndexBuffer::Create(blueIndex, sizeof(blueIndex) / sizeof(uint32_t)));
+		_blue_vao->SetIndexBuffer(ibo2);
+
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -111,6 +99,38 @@ namespace Raying
 		)";
 
 		_shader.reset(new Shader(vertexSrc, fragmentSrc));
+
+
+
+		std::string blue_vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position	= a_Position;
+				gl_Position = vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string blue_fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(0.2, 0.3, 0.8, 1.0);
+			}
+		)";
+
+		_blueShader.reset(new Shader(blue_vertexSrc, blue_fragmentSrc));
+
 	}
 
 	Application::~Application()
@@ -150,9 +170,13 @@ namespace Raying
 			glClearColor(0, 0.3f, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			glBindVertexArray(_vao);
+			_blueShader->Bind();
+			_blue_vao->Bind();
+			glDrawElements(GL_TRIANGLES, _blue_vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+			_vao->Bind();
 			_shader->Bind();
-			glDrawElements(GL_TRIANGLES, _ibo->GetCount(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, _vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : _layerStack)
 				layer->OnUpdate();

@@ -11,6 +11,7 @@
 
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace Raying {
 
@@ -38,10 +39,12 @@ namespace Raying {
 		bool _running = true;
 		LayerStack _layerStack;
 
-		unsigned int _vao;
-		std::unique_ptr<Shader> _shader;
-		std::unique_ptr<VertexBuffer> _vbo;
-		std::unique_ptr<IndexBuffer> _ibo;
+		std::shared_ptr<Shader> _shader;
+		std::shared_ptr<VertexArray> _vao;
+
+		std::shared_ptr<Shader> _blueShader;
+		std::shared_ptr<VertexArray> _blue_vao;
+
 	private:
 		static Application* _instance;
 	};
