@@ -12,6 +12,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Raying {
 
@@ -47,6 +48,7 @@ namespace Raying {
 
 	private:
 		static Application* _instance;
+		OrthographicCamera _camera;
 	};
 
 	Application* CreateApplication();

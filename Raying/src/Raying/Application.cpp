@@ -12,6 +12,7 @@ namespace Raying
 	Application* Application::_instance = nullptr;
 
 	Application::Application()
+		: _camera(-1.8f, 1.8f, -1.0f, 1.0f)
 	{
 		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
@@ -72,6 +73,8 @@ namespace Raying
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 _ViewProjection;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 
@@ -79,7 +82,7 @@ namespace Raying
 			{
 				v_Position	= a_Position;
 				v_Color		= a_Color;
-				gl_Position = vec4(a_Position, 1.0);	
+				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -107,12 +110,14 @@ namespace Raying
 			
 			layout(location = 0) in vec3 a_Position;
 
+			uniform mat4 _ViewProjection;
+
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position	= a_Position;
-				gl_Position = vec4(a_Position, 1.0);	
+				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -163,12 +168,13 @@ namespace Raying
 			RendererCommand::SetClearColor({ 0, 0.3f, 0, 1 });
 			RendererCommand::Clear();
 
-			Renderer::BeginScene();
+			_camera.SetPosition({ 0.5f, 0.0f, 0.0f });
+			_camera.SetRotation(45.0f);
 
-			_blueShader->Bind();
-			Renderer::Submit(_blue_vao);
-			_shader->Bind();
-			Renderer::Submit(_vao);
+			Renderer::BeginScene(_camera);
+
+			Renderer::Submit(_blueShader, _blue_vao);
+			Renderer::Submit(_shader, _vao);
 
 			Renderer::EndScene();
 			
