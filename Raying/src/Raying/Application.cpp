@@ -12,7 +12,6 @@ namespace Raying
 	Application* Application::_instance = nullptr;
 
 	Application::Application()
-		: _camera(-1.8f, 1.8f, -1.0f, 1.0f)
 	{
 		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
@@ -22,120 +21,6 @@ namespace Raying
 
 		_imguiLayer = new ImGuiLayer();
 		PushLayer(_imguiLayer);
-
-		_vao.reset(VertexArray::Create());
-
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
-		};
-
-		std::shared_ptr<VertexBuffer> vbo;
-		vbo.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		BufferLayout layout = {
-			{ShaderAttribute::Color, ShaderDataType::Float4},
-			{ShaderAttribute::Position, ShaderDataType::Float3}
-		};
-		vbo->SetLayout(layout);
-		_vao->AddVertexBuffer(vbo);
-
-		unsigned int indices[3] = { 0, 1, 2 };
-		std::shared_ptr<IndexBuffer> ibo;
-		ibo.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-		_vao->SetIndexBuffer(ibo);
-
-
-		_blue_vao.reset(VertexArray::Create());
-		float blue[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.70f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
-		};
-		std::shared_ptr<VertexBuffer> vbo2;
-		vbo2.reset(VertexBuffer::Create(blue, sizeof(blue)));
-		BufferLayout layout2 = {
-			{ShaderAttribute::Position, ShaderDataType::Float3}
-		};
-		vbo2->SetLayout(layout2);
-		_blue_vao->AddVertexBuffer(vbo2);
-
-		unsigned int blueIndex[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<IndexBuffer> ibo2;
-		ibo2.reset(IndexBuffer::Create(blueIndex, sizeof(blueIndex) / sizeof(uint32_t)));
-		_blue_vao->SetIndexBuffer(ibo2);
-
-
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			uniform mat4 _ViewProjection;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Position	= a_Position;
-				v_Color		= a_Color;
-				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
-			}
-		)";
-
-		_shader.reset(new Shader(vertexSrc, fragmentSrc));
-
-
-
-		std::string blue_vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 _ViewProjection;
-
-			out vec3 v_Position;
-
-			void main()
-			{
-				v_Position	= a_Position;
-				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string blue_fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-
-			void main()
-			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
-			}
-		)";
-
-		_blueShader.reset(new Shader(blue_vertexSrc, blue_fragmentSrc));
-
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -164,20 +49,7 @@ namespace Raying
 	void Application::Run()
 	{
 		while (_running)
-		{
-			RendererCommand::SetClearColor({ 0, 0.3f, 0, 1 });
-			RendererCommand::Clear();
-
-			_camera.SetPosition({ 0.5f, 0.0f, 0.0f });
-			_camera.SetRotation(45.0f);
-
-			Renderer::BeginScene(_camera);
-
-			Renderer::Submit(_blueShader, _blue_vao);
-			Renderer::Submit(_shader, _vao);
-
-			Renderer::EndScene();
-			
+		{			
 			for (Layer* layer : _layerStack)
 				layer->OnUpdate();
 

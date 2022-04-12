@@ -10,4 +10,13 @@
 
 #include "Raying/ImGui/ImGuiLayer.h"
 
+#include "Raying/Renderer/Renderer.h"
+#include "Raying/Renderer/RendererCommand.h"
+
+#include "Raying/Renderer/Buffer.h"
+#include "Raying/Renderer/Shader.h"
+#include "Raying/Renderer/VertexArray.h"
+
+#include "Raying/Renderer/OrthographicCamera.h"
+
 #include "Raying/EntryPoint.h"

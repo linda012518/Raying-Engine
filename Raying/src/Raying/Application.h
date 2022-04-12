@@ -9,11 +9,6 @@
 
 #include "ImGui/ImGuiLayer.h"
 
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/OrthographicCamera.h"
-
 namespace Raying {
 
 	class Raying_API Application
@@ -40,15 +35,11 @@ namespace Raying {
 		bool _running = true;
 		LayerStack _layerStack;
 
-		std::shared_ptr<Shader> _shader;
-		std::shared_ptr<VertexArray> _vao;
 
-		std::shared_ptr<Shader> _blueShader;
-		std::shared_ptr<VertexArray> _blue_vao;
 
 	private:
 		static Application* _instance;
-		OrthographicCamera _camera;
+
 	};
 
 	Application* CreateApplication();

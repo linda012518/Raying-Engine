@@ -6,8 +6,6 @@
 #include <memory>
 #include <glm/glm.hpp>
 
-class VertexArray;
-
 namespace Raying {
 
 	class Raying_API RendererCommand
