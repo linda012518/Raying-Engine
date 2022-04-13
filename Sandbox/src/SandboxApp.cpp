@@ -3,6 +3,8 @@
 
 #include "imgui/imgui.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public Raying::Layer
 {
 public:
@@ -34,10 +36,10 @@ public:
 
 		_blue_vao.reset(Raying::VertexArray::Create());
 		float blue[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.70f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 		std::shared_ptr<Raying::VertexBuffer> vbo2;
 		vbo2.reset(Raying::VertexBuffer::Create(blue, sizeof(blue)));
@@ -60,6 +62,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 _ViewProjection;
+			uniform mat4 _Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -68,7 +71,7 @@ public:
 			{
 				v_Position	= a_Position;
 				v_Color		= a_Color;
-				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = _ViewProjection * _Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -97,13 +100,14 @@ public:
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 _ViewProjection;
+			uniform mat4 _Transform;
 
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position	= a_Position;
-				gl_Position = _ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = _ViewProjection * _Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -149,7 +153,17 @@ public:
 
 		Raying::Renderer::BeginScene(_camera);
 
-		Raying::Renderer::Submit(_blueShader, _blue_vao);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		for (size_t y = 0; y < 20; y++)
+		{
+			for (size_t x = 0; x < 20; x++)
+			{
+				glm::vec3 pos = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Raying::Renderer::Submit(_blueShader, _blue_vao, transform);
+			}
+		}
 		Raying::Renderer::Submit(_shader, _vao);
 
 		Raying::Renderer::EndScene();
