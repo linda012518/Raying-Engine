@@ -7,6 +7,8 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Core/Timestep.h"
+
 #include "ImGui/ImGuiLayer.h"
 
 namespace Raying {
@@ -35,7 +37,7 @@ namespace Raying {
 		bool _running = true;
 		LayerStack _layerStack;
 
-
+		float _lastFrameTime = 0.0f;
 
 	private:
 		static Application* _instance;

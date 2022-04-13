@@ -124,22 +124,22 @@ public:
 
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Raying::Timestep ts) override
 	{
-		//if (Raying::Input::IsKeyPressed(RAYING_KEY_LEFT))
-		//	_cameraPosition.x -= _cameraMoveSpeed;
-		//else if (Raying::Input::IsKeyPressed(RAYING_KEY_RIGHT))
-		//	_cameraPosition.x += _cameraMoveSpeed;
+		if (Raying::Input::IsKeyPressed(RAYING_KEY_LEFT))
+			_cameraPosition.x -= _cameraMoveSpeed * ts;
+		else if (Raying::Input::IsKeyPressed(RAYING_KEY_RIGHT))
+			_cameraPosition.x += _cameraMoveSpeed * ts;
 
-		//if (Raying::Input::IsKeyPressed(RAYING_KEY_UP))
-		//	_cameraPosition.y += _cameraMoveSpeed;
-		//else if (Raying::Input::IsKeyPressed(RAYING_KEY_DOWN))
-		//	_cameraPosition.y -= _cameraMoveSpeed;
+		if (Raying::Input::IsKeyPressed(RAYING_KEY_UP))
+			_cameraPosition.y += _cameraMoveSpeed * ts;
+		else if (Raying::Input::IsKeyPressed(RAYING_KEY_DOWN))
+			_cameraPosition.y -= _cameraMoveSpeed * ts;
 
-		//if (Raying::Input::IsKeyPressed(RAYING_KEY_A))
-		//	_cameraRotation += _cameraRotationSpeed;
-		//if (Raying::Input::IsKeyPressed(RAYING_KEY_D))
-		//	_cameraRotation -= _cameraRotationSpeed;
+		if (Raying::Input::IsKeyPressed(RAYING_KEY_A))
+			_cameraRotation += _cameraRotationSpeed * ts;
+		if (Raying::Input::IsKeyPressed(RAYING_KEY_D))
+			_cameraRotation -= _cameraRotationSpeed * ts;
 
 		Raying::RendererCommand::SetClearColor({ 0, 0.3f, 0, 1 });
 		Raying::RendererCommand::Clear();
@@ -163,8 +163,8 @@ public:
 
 	void OnEvent(Raying::Event& event) override
 	{
-		Raying::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<Raying::KeyPressedEvent>(Raying_Bind_Event_Fn(ExampleLayer::OnKeyPressed));
+		//Raying::EventDispatcher dispatcher(event);
+		//dispatcher.Dispatch<Raying::KeyPressedEvent>(Raying_Bind_Event_Fn(ExampleLayer::OnKeyPressed));
 	}
 
 	bool OnKeyPressed(Raying::KeyPressedEvent& event)
@@ -192,10 +192,10 @@ private:
 	std::shared_ptr<Raying::VertexArray> _blue_vao;
 
 	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
-	float _cameraMoveSpeed = 0.1f;
+	float _cameraMoveSpeed = 5.0f;
 
 	float _cameraRotation = 0.0f;
-	float _cameraRotationSpeed = 1.0f;
+	float _cameraRotationSpeed = 180.0f;
 };
 
 class Sandbox : public Raying::Application

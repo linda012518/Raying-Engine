@@ -4,6 +4,7 @@
 #include "Renderer/Renderer.h"
 
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace Raying
 {
@@ -18,6 +19,7 @@ namespace Raying
 
 		_window = std::unique_ptr<Window>(Window::Create());
 		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
+		_window->SetVSync(false);
 
 		_imguiLayer = new ImGuiLayer();
 		PushLayer(_imguiLayer);
@@ -50,8 +52,12 @@ namespace Raying
 	{
 		while (_running)
 		{			
+			float time = glfwGetTime();
+			Timestep ts = time - _lastFrameTime;
+			_lastFrameTime = time;
+
 			for (Layer* layer : _layerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(ts);
 
 			_imguiLayer->Begin();
 			for (Layer* layer : _layerStack)

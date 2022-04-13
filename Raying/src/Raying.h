@@ -4,6 +4,8 @@
 #include "Raying/Layer.h"
 #include "Raying/Log.h"
 
+#include "Raying/Core/Timestep.h"
+
 #include "Raying/Input.h"
 #include "Raying/KeyCodes.h"
 #include "Raying/MouseButtonCodes.h"
