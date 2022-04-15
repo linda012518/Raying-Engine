@@ -2,6 +2,8 @@
 #include "Renderer.h"
 #include "VertexArray.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 namespace Raying {
 
 	Renderer::SceneData* Renderer::_sceneData = new Renderer::SceneData();
@@ -18,8 +20,8 @@ namespace Raying {
 	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vetrexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->UploadUniformMat4("_ViewProjection", _sceneData->ViewProjectionMatrix);
-		shader->UploadUniformMat4("_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_ViewProjection", _sceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_Transform", transform);
 
 		vetrexArray->Bind();
 		RendererCommand::DrawIndexed(vetrexArray);

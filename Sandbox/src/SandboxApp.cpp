@@ -1,9 +1,11 @@
 
 #include <Raying.h>
+#include <Platform/OpenGL/OpenGLShader.h>
 
 #include "imgui/imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Raying::Layer
 {
@@ -90,7 +92,7 @@ public:
 			}
 		)";
 
-		_shader.reset(new Raying::Shader(vertexSrc, fragmentSrc));
+		_shader.reset(Raying::Shader::Create(vertexSrc, fragmentSrc));
 
 
 
@@ -118,13 +120,15 @@ public:
 
 			in vec3 v_Position;
 
+			uniform vec3 u_Color;
+
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = vec4(u_Color, 1.0);
 			}
 		)";
 
-		_blueShader.reset(new Raying::Shader(blue_vertexSrc, blue_fragmentSrc));
+		_blueShader.reset(Raying::Shader::Create(blue_vertexSrc, blue_fragmentSrc));
 
 	}
 
@@ -153,6 +157,9 @@ public:
 
 		Raying::Renderer::BeginScene(_camera);
 
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->Bind();
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->UploadUniformFloat3("u_Color", _color);
+
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
 		for (size_t y = 0; y < 20; y++)
@@ -172,7 +179,11 @@ public:
 
 	void OnImGuiRender() override
 	{
+		ImGui::Begin("Setting");
 
+		ImGui::ColorEdit3("Box Color", glm::value_ptr(_color));
+
+		ImGui::End();
 	}
 
 	void OnEvent(Raying::Event& event) override
@@ -210,6 +221,8 @@ private:
 
 	float _cameraRotation = 0.0f;
 	float _cameraRotationSpeed = 180.0f;
+
+	glm::vec3 _color;
 };
 
 class Sandbox : public Raying::Application
