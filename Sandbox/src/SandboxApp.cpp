@@ -21,7 +21,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
 
-		std::shared_ptr<Raying::VertexBuffer> vbo;
+		Raying::Ref<Raying::VertexBuffer> vbo;
 		vbo.reset(Raying::VertexBuffer::Create(vertices, sizeof(vertices)));
 		Raying::BufferLayout layout = {
 			{Raying::ShaderAttribute::Color, Raying::ShaderDataType::Float4},
@@ -31,7 +31,7 @@ public:
 		_vao->AddVertexBuffer(vbo);
 
 		unsigned int indices[3] = { 0, 1, 2 };
-		std::shared_ptr<Raying::IndexBuffer> ibo;
+		Raying::Ref<Raying::IndexBuffer> ibo;
 		ibo.reset(Raying::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		_vao->SetIndexBuffer(ibo);
 
@@ -43,7 +43,7 @@ public:
 			 0.5f,  0.5f, 0.0f,
 			-0.5f,  0.5f, 0.0f
 		};
-		std::shared_ptr<Raying::VertexBuffer> vbo2;
+		Raying::Ref<Raying::VertexBuffer> vbo2;
 		vbo2.reset(Raying::VertexBuffer::Create(blue, sizeof(blue)));
 		Raying::BufferLayout layout2 = {
 			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3}
@@ -52,7 +52,7 @@ public:
 		_blue_vao->AddVertexBuffer(vbo2);
 
 		unsigned int blueIndex[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Raying::IndexBuffer> ibo2;
+		Raying::Ref<Raying::IndexBuffer> ibo2;
 		ibo2.reset(Raying::IndexBuffer::Create(blueIndex, sizeof(blueIndex) / sizeof(uint32_t)));
 		_blue_vao->SetIndexBuffer(ibo2);
 
@@ -210,11 +210,11 @@ public:
 private:
 	Raying::OrthographicCamera _camera;
 
-	std::shared_ptr<Raying::Shader> _shader;
-	std::shared_ptr<Raying::VertexArray> _vao;
+	Raying::Ref<Raying::Shader> _shader;
+	Raying::Ref<Raying::VertexArray> _vao;
 
-	std::shared_ptr<Raying::Shader> _blueShader;
-	std::shared_ptr<Raying::VertexArray> _blue_vao;
+	Raying::Ref<Raying::Shader> _blueShader;
+	Raying::Ref<Raying::VertexArray> _blue_vao;
 
 	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
 	float _cameraMoveSpeed = 5.0f;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef Raying_Platform_Windows
 	#if Raying_Dynamic_Link
 		#ifdef Raying_Build_Dll
@@ -29,3 +31,12 @@
 #define BIT(x) (1 << x)
 
 #define Raying_Bind_Event_Fn(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace Raying
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
