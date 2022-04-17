@@ -37,25 +37,6 @@ namespace Raying {
 		return 0;
 	}
 
-	static uint32_t ShaderAttriIndex(ShaderAttribute attr, uint32_t* offset)
-	{
-		switch (attr)
-		{
-			case Raying::ShaderAttribute::Position: *offset = 0  * 4; return 0;
-			case Raying::ShaderAttribute::Color:	*offset = 3  * 4; return 1;
-			case Raying::ShaderAttribute::Normal:	*offset = 7  * 4; return 2;
-			case Raying::ShaderAttribute::UV1:		*offset = 10 * 4; return 3;
-			case Raying::ShaderAttribute::UV2:		*offset = 12 * 4; return 4;
-			case Raying::ShaderAttribute::UV3:		*offset = 14 * 4; return 5;
-			case Raying::ShaderAttribute::UV4:		*offset = 16 * 4; return 6;
-			case Raying::ShaderAttribute::UV5:		*offset = 18 * 4; return 7;
-			case Raying::ShaderAttribute::UV6:		*offset = 20 * 4; return 8;
-		}
-
-		Raying_Core_Assert(false, "Unknown ShaderAttribute!");
-		return -1;
-	}
-
 	struct Raying_API BufferElement
 	{
 		ShaderAttribute Attribute;
@@ -70,7 +51,6 @@ namespace Raying {
 		BufferElement(ShaderAttribute attri, ShaderDataType type, bool normalized = false)
 			: Attribute(attri), Type(type), Size(ShaderDataTypeSize(type)), Normalized(normalized)
 		{
-			Index = ShaderAttriIndex(attri, &Offset);
 		}
 
 		uint32_t GetComponentCount() const
@@ -115,9 +95,12 @@ namespace Raying {
 	private:
 		void CalculateStride()
 		{
+			uint32_t index = 0;
 			_stride = 0;
 			for (auto& element : _elements)
 			{
+				element.Offset = _stride;
+				element.Index = index++;
 				_stride += element.Size;
 			}
 		}

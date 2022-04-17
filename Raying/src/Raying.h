@@ -17,6 +17,7 @@
 
 #include "Raying/Renderer/Buffer.h"
 #include "Raying/Renderer/Shader.h"
+#include "Raying/Renderer/Texture.h"
 #include "Raying/Renderer/VertexArray.h"
 
 #include "Raying/Renderer/OrthographicCamera.h"

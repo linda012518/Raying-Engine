@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Raying/vendor/imgui"
 IncludeDir["glm"] = "Raying/vendor/glm"
+IncludeDir["stb_image"] = "Raying/vendor/stb_image"
 
 group "Dependencies"
 	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
@@ -42,6 +43,8 @@ project "Raying"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/**.hpp",
 		"%{prj.name}/vendor/glm/**.inl"
 	}
@@ -58,7 +61,8 @@ project "Raying"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links 

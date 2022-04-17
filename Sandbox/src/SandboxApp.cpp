@@ -24,8 +24,8 @@ public:
 		Raying::Ref<Raying::VertexBuffer> vbo;
 		vbo.reset(Raying::VertexBuffer::Create(vertices, sizeof(vertices)));
 		Raying::BufferLayout layout = {
-			{Raying::ShaderAttribute::Color, Raying::ShaderDataType::Float4},
-			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3}
+			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3},
+			{Raying::ShaderAttribute::Color, Raying::ShaderDataType::Float4}
 		};
 		vbo->SetLayout(layout);
 		_vao->AddVertexBuffer(vbo);
@@ -37,16 +37,17 @@ public:
 
 
 		_blue_vao.reset(Raying::VertexArray::Create());
-		float blue[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float blue[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		Raying::Ref<Raying::VertexBuffer> vbo2;
 		vbo2.reset(Raying::VertexBuffer::Create(blue, sizeof(blue)));
 		Raying::BufferLayout layout2 = {
-			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3}
+			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3},
+			{Raying::ShaderAttribute::UV1, Raying::ShaderDataType::Float2}
 		};
 		vbo2->SetLayout(layout2);
 		_blue_vao->AddVertexBuffer(vbo2);
@@ -130,6 +131,46 @@ public:
 
 		_blueShader.reset(Raying::Shader::Create(blue_vertexSrc, blue_fragmentSrc));
 
+
+		std::string texture_vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_Texcoord;
+
+			uniform mat4 _ViewProjection;
+			uniform mat4 _Transform;
+
+			out vec2 v_Texcoord;
+
+			void main()
+			{
+				v_Texcoord	= a_Texcoord;
+				gl_Position = _ViewProjection * _Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string texture_fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_Texcoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_Texcoord);
+				//color = vec4(v_Texcoord, 0.0, 1.0);
+			}
+		)";
+
+		_textureShader.reset(Raying::Shader::Create(texture_vertexSrc, texture_fragmentSrc));
+
+		_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->Bind();
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Raying::Timestep ts) override
@@ -173,6 +214,9 @@ public:
 		}
 		Raying::Renderer::Submit(_shader, _vao);
 
+		_texture->Bind();
+		Raying::Renderer::Submit(_textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
 		Raying::Renderer::EndScene();
 
 	}
@@ -215,6 +259,9 @@ private:
 
 	Raying::Ref<Raying::Shader> _blueShader;
 	Raying::Ref<Raying::VertexArray> _blue_vao;
+
+	Raying::Ref<Raying::Shader> _textureShader;
+	Raying::Ref<Raying::Texture> _texture;
 
 	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
 	float _cameraMoveSpeed = 5.0f;
