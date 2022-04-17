@@ -30,7 +30,7 @@ namespace Raying
 	void LayerStack::PopLayer(Layer* layer)
 	{
 		auto itr = std::find(_layers.begin(), _layers.begin() + _layerInsert, layer);
-		if (itr != _layers.end())
+		if (itr != _layers.begin() + _layerInsert)
 		{
 			layer->OnDetach();
 			_layers.erase(itr);
