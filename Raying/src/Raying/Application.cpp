@@ -21,6 +21,8 @@ namespace Raying
 		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
 		_window->SetVSync(false);
 
+		Renderer::Init();
+
 		_imguiLayer = new ImGuiLayer();
 		PushLayer(_imguiLayer);
 	}

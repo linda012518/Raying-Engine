@@ -169,6 +169,7 @@ public:
 		_textureShader.reset(Raying::Shader::Create(texture_vertexSrc, texture_fragmentSrc));
 
 		_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
+		_logoTexture = Raying::Texture2D::Create("assets/textures/Logo.png");
 		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->Bind();
 		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->UploadUniformInt("u_Texture", 0);
 	}
@@ -212,9 +213,11 @@ public:
 				Raying::Renderer::Submit(_blueShader, _blue_vao, transform);
 			}
 		}
-		Raying::Renderer::Submit(_shader, _vao);
+		//Raying::Renderer::Submit(_shader, _vao);
 
 		_texture->Bind();
+		Raying::Renderer::Submit(_textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		_logoTexture->Bind();
 		Raying::Renderer::Submit(_textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		Raying::Renderer::EndScene();
@@ -261,7 +264,7 @@ private:
 	Raying::Ref<Raying::VertexArray> _blue_vao;
 
 	Raying::Ref<Raying::Shader> _textureShader;
-	Raying::Ref<Raying::Texture> _texture;
+	Raying::Ref<Raying::Texture> _texture, _logoTexture;
 
 	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
 	float _cameraMoveSpeed = 5.0f;
