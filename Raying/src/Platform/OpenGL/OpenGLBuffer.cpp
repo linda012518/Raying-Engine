@@ -33,8 +33,8 @@ namespace Raying {
 		: _count(count)
 	{
 		glCreateBuffers(1, &_rendererID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _rendererID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _rendererID); // 也可以用 GL_ARRAY_BUFFER
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW); // 也可以用 GL_ARRAY_BUFFER
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
