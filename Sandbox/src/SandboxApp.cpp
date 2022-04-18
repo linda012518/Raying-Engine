@@ -131,42 +131,7 @@ public:
 
 		_blueShader.reset(Raying::Shader::Create(blue_vertexSrc, blue_fragmentSrc));
 
-
-		std::string texture_vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_Texcoord;
-
-			uniform mat4 _ViewProjection;
-			uniform mat4 _Transform;
-
-			out vec2 v_Texcoord;
-
-			void main()
-			{
-				v_Texcoord	= a_Texcoord;
-				gl_Position = _ViewProjection * _Transform * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string texture_fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec2 v_Texcoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				color = texture(u_Texture, v_Texcoord);
-				//color = vec4(v_Texcoord, 0.0, 1.0);
-			}
-		)";
-
-		_textureShader.reset(Raying::Shader::Create(texture_vertexSrc, texture_fragmentSrc));
+		_textureShader.reset(Raying::Shader::Create("assets/shaders/Texture.glsl"));
 
 		_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
 		_logoTexture = Raying::Texture2D::Create("assets/textures/Logo.png");
