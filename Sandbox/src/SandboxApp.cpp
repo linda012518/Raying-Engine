@@ -93,7 +93,7 @@ public:
 			}
 		)";
 
-		_shader.reset(Raying::Shader::Create(vertexSrc, fragmentSrc));
+		_shader = Raying::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 
 
@@ -129,14 +129,14 @@ public:
 			}
 		)";
 
-		_blueShader.reset(Raying::Shader::Create(blue_vertexSrc, blue_fragmentSrc));
+		_blueShader = Raying::Shader::Create("blue", blue_vertexSrc, blue_fragmentSrc);
 
-		_textureShader.reset(Raying::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = _shaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
 		_logoTexture = Raying::Texture2D::Create("assets/textures/Logo.png");
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->Bind();
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(_textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Raying::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Raying::Timestep ts) override
@@ -180,10 +180,12 @@ public:
 		}
 		//Raying::Renderer::Submit(_shader, _vao);
 
+		auto textureShader = _shaderLibrary.Get("Texture");
+
 		_texture->Bind();
-		Raying::Renderer::Submit(_textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Raying::Renderer::Submit(textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		_logoTexture->Bind();
-		Raying::Renderer::Submit(_textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Raying::Renderer::Submit(textureShader, _blue_vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		Raying::Renderer::EndScene();
 
@@ -222,13 +224,14 @@ public:
 private:
 	Raying::OrthographicCamera _camera;
 
+	Raying::ShaderLibrary _shaderLibrary;
+
 	Raying::Ref<Raying::Shader> _shader;
 	Raying::Ref<Raying::VertexArray> _vao;
 
 	Raying::Ref<Raying::Shader> _blueShader;
 	Raying::Ref<Raying::VertexArray> _blue_vao;
 
-	Raying::Ref<Raying::Shader> _textureShader;
 	Raying::Ref<Raying::Texture> _texture, _logoTexture;
 
 	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
