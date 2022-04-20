@@ -9,6 +9,7 @@
 #include "Raying/Input.h"
 #include "Raying/KeyCodes.h"
 #include "Raying/MouseButtonCodes.h"
+#include "Raying/OrthographicCameraController.h"
 
 #include "Raying/ImGui/ImGuiLayer.h"
 

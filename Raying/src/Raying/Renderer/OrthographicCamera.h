@@ -11,6 +11,8 @@ namespace Raying {
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
 
+		void SetPorjection(float left, float right, float bottom, float top);
+
 		const glm::vec3& GetPostion() const { return _position; }
 		void SetPosition(const glm::vec3& position) { _position = position; RecalculateViewMatrix(); }
 

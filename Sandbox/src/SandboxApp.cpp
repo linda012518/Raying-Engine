@@ -11,7 +11,7 @@ class ExampleLayer : public Raying::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), _camera(-1.8f, 1.8f, -1.0f, 1.0f)
+		: Layer("Example"), _cameraCtrl(1280.0f / 720.0f, true)
 	{
 		_vao.reset(Raying::VertexArray::Create());
 
@@ -141,28 +141,12 @@ public:
 
 	void OnUpdate(Raying::Timestep ts) override
 	{
-		if (Raying::Input::IsKeyPressed(RAYING_KEY_LEFT))
-			_cameraPosition.x -= _cameraMoveSpeed * ts;
-		else if (Raying::Input::IsKeyPressed(RAYING_KEY_RIGHT))
-			_cameraPosition.x += _cameraMoveSpeed * ts;
-
-		if (Raying::Input::IsKeyPressed(RAYING_KEY_UP))
-			_cameraPosition.y += _cameraMoveSpeed * ts;
-		else if (Raying::Input::IsKeyPressed(RAYING_KEY_DOWN))
-			_cameraPosition.y -= _cameraMoveSpeed * ts;
-
-		if (Raying::Input::IsKeyPressed(RAYING_KEY_A))
-			_cameraRotation += _cameraRotationSpeed * ts;
-		if (Raying::Input::IsKeyPressed(RAYING_KEY_D))
-			_cameraRotation -= _cameraRotationSpeed * ts;
+		_cameraCtrl.OnUpdate(ts);
 
 		Raying::RendererCommand::SetClearColor({ 0, 0.3f, 0, 1 });
 		Raying::RendererCommand::Clear();
 
-		_camera.SetPosition(_cameraPosition);
-		_camera.SetRotation(_cameraRotation);
-
-		Raying::Renderer::BeginScene(_camera);
+		Raying::Renderer::BeginScene(_cameraCtrl.GetCamera());
 
 		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->Bind();
 		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->UploadUniformFloat3("u_Color", _color);
@@ -202,27 +186,28 @@ public:
 
 	void OnEvent(Raying::Event& event) override
 	{
+		_cameraCtrl.OnEvent(event);
 		//Raying::EventDispatcher dispatcher(event);
 		//dispatcher.Dispatch<Raying::KeyPressedEvent>(Raying_Bind_Event_Fn(ExampleLayer::OnKeyPressed));
 	}
 
 	bool OnKeyPressed(Raying::KeyPressedEvent& event)
 	{
-		if (event.GetKeyCode() == RAYING_KEY_LEFT)
-			_cameraPosition.x -= _cameraMoveSpeed;
-		else if (event.GetKeyCode() == RAYING_KEY_RIGHT)
-			_cameraPosition.x += _cameraMoveSpeed;
+		//if (event.GetKeyCode() == RAYING_KEY_LEFT)
+		//	_cameraPosition.x -= _cameraMoveSpeed;
+		//else if (event.GetKeyCode() == RAYING_KEY_RIGHT)
+		//	_cameraPosition.x += _cameraMoveSpeed;
 
-		if (event.GetKeyCode() == RAYING_KEY_UP)
-			_cameraPosition.y += _cameraMoveSpeed;
-		else if (event.GetKeyCode() == RAYING_KEY_DOWN)
-			_cameraPosition.y -= _cameraMoveSpeed;
+		//if (event.GetKeyCode() == RAYING_KEY_UP)
+		//	_cameraPosition.y += _cameraMoveSpeed;
+		//else if (event.GetKeyCode() == RAYING_KEY_DOWN)
+		//	_cameraPosition.y -= _cameraMoveSpeed;
 
 		return false;
 	}
 
 private:
-	Raying::OrthographicCamera _camera;
+	Raying::OrthographicCameraController _cameraCtrl;
 
 	Raying::ShaderLibrary _shaderLibrary;
 
@@ -233,12 +218,6 @@ private:
 	Raying::Ref<Raying::VertexArray> _blue_vao;
 
 	Raying::Ref<Raying::Texture> _texture, _logoTexture;
-
-	glm::vec3 _cameraPosition = {0.0f, 0.0f, 0.0f};
-	float _cameraMoveSpeed = 5.0f;
-
-	float _cameraRotation = 0.0f;
-	float _cameraRotationSpeed = 180.0f;
 
 	glm::vec3 _color;
 };

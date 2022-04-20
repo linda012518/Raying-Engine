@@ -54,7 +54,7 @@ namespace Raying
 	{
 		while (_running)
 		{			
-			float time = glfwGetTime();
+			float time = (float)glfwGetTime();
 			Timestep ts = time - _lastFrameTime;
 			_lastFrameTime = time;
 
