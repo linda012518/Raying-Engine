@@ -41,6 +41,7 @@ namespace Raying
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_Fn(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(Bind_Event_Fn(OnWindowResize));
 
 		for (auto itr = _layerStack.end(); itr != _layerStack.begin(); )
 		{
@@ -58,8 +59,11 @@ namespace Raying
 			Timestep ts = time - _lastFrameTime;
 			_lastFrameTime = time;
 
-			for (Layer* layer : _layerStack)
-				layer->OnUpdate(ts);
+			if (!_minimized) 
+			{
+				for (Layer* layer : _layerStack)
+					layer->OnUpdate(ts);
+			}
 
 			_imguiLayer->Begin();
 			for (Layer* layer : _layerStack)
@@ -74,6 +78,20 @@ namespace Raying
 	{
 		_running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			_minimized = true;
+			return false;
+		}
+
+		_minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 
 }

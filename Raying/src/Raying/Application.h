@@ -31,15 +31,17 @@ namespace Raying {
 		inline static Application& Get() { return *_instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
+	private:
 		std::unique_ptr<Window> _window;//unique_ptr 独占所指向的对象
 		ImGuiLayer* _imguiLayer;
 		bool _running = true;
+		bool _minimized = false; // 最小化
 		LayerStack _layerStack;
 
 		float _lastFrameTime = 0.0f;
 
-	private:
 		static Application* _instance;
 
 	};

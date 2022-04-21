@@ -20,6 +20,9 @@ namespace Raying {
 		OrthographicCamera& GetCamera() { return _camera; }
 		const OrthographicCamera& GetCamera() const { return _camera; }
 
+		float GetZoomLevel() const { return _zoomLevel; }
+		void SetZoomLevel(float level) { _zoomLevel = level; }
+
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
