@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Raying/Application.h"
-#include "Raying/Layer.h"
-#include "Raying/Log.h"
+#include "Raying/Core/Application.h"
+#include "Raying/Core/Layer.h"
+#include "Raying/Core/Log.h"
 
 #include "Raying/Core/Timestep.h"
 
-#include "Raying/Input.h"
-#include "Raying/KeyCodes.h"
-#include "Raying/MouseButtonCodes.h"
-#include "Raying/OrthographicCameraController.h"
+#include "Raying/Core/Input.h"
+#include "Raying/Core/KeyCodes.h"
+#include "Raying/Core/MouseButtonCodes.h"
+
 
 #include "Raying/ImGui/ImGuiLayer.h"
 
@@ -21,6 +21,7 @@
 #include "Raying/Renderer/Texture.h"
 #include "Raying/Renderer/VertexArray.h"
 
+#include "Raying/Renderer/OrthographicCameraController.h"
 #include "Raying/Renderer/OrthographicCamera.h"
 
-#include "Raying/EntryPoint.h"
+#include "Raying/Core/EntryPoint.h"

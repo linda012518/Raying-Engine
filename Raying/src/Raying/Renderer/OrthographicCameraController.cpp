@@ -1,8 +1,8 @@
 #include "hzpch.h"
 #include "OrthographicCameraController.h"
 
-#include "Input.h"
-#include "KeyCodes.h"
+#include "Raying/Core/Input.h"
+#include "Raying/Core/KeyCodes.h"
 
 namespace Raying {
 

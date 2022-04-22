@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Raying/Core.h"
+#include "Raying/Core/Core.h"
 #include "RendererCommand.h"
 #include "OrthographicCamera.h"
 #include "Shader.h"

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core.h"
-#include "Renderer/OrthographicCamera.h"
-#include "Core/Timestep.h"
+#include "Raying/Core/Core.h"
+#include "Raying/Renderer/OrthographicCamera.h"
+#include "Raying/Core/Timestep.h"
 
-#include "Events/ApplicationEvent.h"
-#include "Events/MouseEvent.h"
+#include "Raying/Events/ApplicationEvent.h"
+#include "Raying/Events/MouseEvent.h"
 
 namespace Raying {
 

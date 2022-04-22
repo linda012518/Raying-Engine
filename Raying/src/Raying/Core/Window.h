@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hzpch.h"
-#include "Raying/Core.h"
+#include "Core.h"
 #include "Raying/Events/Event.h"
 
 namespace Raying

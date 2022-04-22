@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Raying/Window.h"
+#include "Raying/Core/Window.h"
 #include "Raying/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

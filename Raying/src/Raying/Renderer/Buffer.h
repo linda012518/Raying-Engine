@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "Raying/Core.h"
+#include "Raying/Core/Core.h"
 
 namespace Raying {
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core.h"
-#include "Core/Timestep.h"
-#include "Events/Event.h"
+#include "Timestep.h"
+#include "Raying/Events/Event.h"
 
 namespace Raying
 {

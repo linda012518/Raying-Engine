@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <vector>
+
+#include "Raying/Core/Core.h"
 #include "Buffer.h"
 
 namespace Raying {

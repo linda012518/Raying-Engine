@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Raying/Input.h"
+#include "Raying/Core/Input.h"
 
 namespace Raying
 {
