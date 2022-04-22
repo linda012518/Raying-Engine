@@ -83,7 +83,6 @@ project "Raying"
 
 		defines
 		{
-			"Raying_Platform_Windows",
 			"Raying_Build_Dll",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -142,11 +141,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines
-		{
-			"Raying_Platform_Windows"
-		}
 
 	filter "configurations:Debug"
 		defines "Raying_Debug"
