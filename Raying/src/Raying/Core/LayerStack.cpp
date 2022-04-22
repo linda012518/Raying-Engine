@@ -11,7 +11,10 @@ namespace Raying
 	LayerStack::~LayerStack()
 	{
 		for (Layer* layer : _layers)
+		{
+			layer->OnDetach();
 			delete layer;
+		}
 	}
 
 	void LayerStack::PushLayer(Layer* layer)
