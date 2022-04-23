@@ -14,28 +14,6 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-	_vao = Raying::VertexArray::Create();
-
-	float squareVertices[3 * 4] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
-
-	Raying::Ref<Raying::VertexBuffer> vbo;
-	vbo.reset(Raying::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-	vbo->SetLayout({
-		{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3}
-		});
-	_vao->AddVertexBuffer(vbo);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	Raying::Ref<Raying::IndexBuffer> ibo;
-	ibo.reset(Raying::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-	_vao->SetIndexBuffer(ibo);
-
-	_shader = Raying::Shader::Create("assets/shaders/FlatColor.glsl");
 
 }
 
@@ -52,14 +30,10 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 	Raying::RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	Raying::RendererCommand::Clear();
 
-	Raying::Renderer::BeginScene(_cameraCtrl.GetCamera());
+	Raying::Renderer2D::BeginScene(_cameraCtrl.GetCamera());
+	Raying::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f,1.0f }, _color);
+	Raying::Renderer2D::EndScene();
 
-	std::dynamic_pointer_cast<Raying::OpenGLShader>(_shader)->Bind();
-	std::dynamic_pointer_cast<Raying::OpenGLShader>(_shader)->UploadUniformFloat4("u_Color", _color);
-
-	Raying::Renderer::Submit(_shader, _vao, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	Raying::Renderer::EndScene();
 }
 
 void Sandbox2D::OnImGuiRender()

@@ -14,6 +14,7 @@
 #include "Raying/ImGui/ImGuiLayer.h"
 
 #include "Raying/Renderer/Renderer.h"
+#include "Raying/Renderer/Renderer2D.h"
 #include "Raying/Renderer/RendererCommand.h"
 
 #include "Raying/Renderer/Buffer.h"
