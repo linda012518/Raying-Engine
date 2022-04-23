@@ -4,6 +4,6 @@
 
 namespace Raying {
 
-	RendererAPI* RendererCommand::_rendererAPI = new OpenGLRendererAPI();
+	Scope<RendererAPI> RendererCommand::_rendererAPI = CreateScope<OpenGLRendererAPI>();
 
 }

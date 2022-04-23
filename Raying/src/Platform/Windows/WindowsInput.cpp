@@ -6,7 +6,7 @@
 
 namespace Raying
 {
-	Input* Input::_instance = new WindowsInput();
+	Scope<Input> Input::_instance = CreateScope<WindowsInput>();
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{

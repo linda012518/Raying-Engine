@@ -51,7 +51,7 @@ namespace Raying
 
 		_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
 
-		_context = new OpenGLContext(_window);
+		_context = CreateScope<OpenGLContext>(_window);
 		_context->Init();
 
 		glfwSetWindowUserPointer(_window, &_data);
