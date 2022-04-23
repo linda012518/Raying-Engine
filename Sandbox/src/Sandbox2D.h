@@ -21,6 +21,8 @@ private:
 	Raying::Ref<Raying::Shader> _shader;
 	Raying::Ref<Raying::VertexArray> _vao;
 
+	Raying::Ref<Raying::Texture2D> _texture;
+
 	glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 
 };
