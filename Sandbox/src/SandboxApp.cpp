@@ -1,5 +1,6 @@
 
 #include <Raying.h>
+#include <Raying/Core/EntryPoint.h>
 #include <Platform/OpenGL/OpenGLShader.h>
 
 #include "imgui/imgui.h"
@@ -7,13 +8,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public Raying::Layer
 {
 public:
 	ExampleLayer()
 		: Layer("Example"), _cameraCtrl(1280.0f / 720.0f, true)
 	{
-		_vao.reset(Raying::VertexArray::Create());
+		_vao = Raying::VertexArray::Create();
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -36,7 +39,7 @@ public:
 		_vao->SetIndexBuffer(ibo);
 
 
-		_blue_vao.reset(Raying::VertexArray::Create());
+		_blue_vao = Raying::VertexArray::Create();
 		float blue[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
 			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
@@ -227,7 +230,8 @@ class Sandbox : public Raying::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 
 	~Sandbox()

@@ -24,4 +24,3 @@
 #include "Raying/Renderer/OrthographicCameraController.h"
 #include "Raying/Renderer/OrthographicCamera.h"
 
-#include "Raying/Core/EntryPoint.h"

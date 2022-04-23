@@ -5,7 +5,7 @@
 
 namespace Raying {
 
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -13,7 +13,7 @@ namespace Raying {
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return new OpenGLVertexArray();
+				return std::make_shared<OpenGLVertexArray>();
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
