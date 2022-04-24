@@ -12,8 +12,8 @@ namespace Raying {
 	struct Renderer2DSorage
 	{
 		Ref<VertexArray> VAO;
-		Ref<Shader> FlatColorShader;
 		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
 	};
 
 	static Renderer2DSorage* _data;
@@ -22,7 +22,7 @@ namespace Raying {
 	{
 		_data = new Renderer2DSorage();
 
-		_data->VAO = Raying::VertexArray::Create();
+		_data->VAO = VertexArray::Create();
 
 		float squareVertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
@@ -31,21 +31,24 @@ namespace Raying {
 			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f
 		};
 
-		Raying::Ref<Raying::VertexBuffer> vbo;
-		vbo.reset(Raying::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Ref<VertexBuffer> vbo;
+		vbo.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		vbo->SetLayout({
-			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3},
-			{Raying::ShaderAttribute::UV1, Raying::ShaderDataType::Float2}
+			{ShaderAttribute::Position, ShaderDataType::Float3},
+			{ShaderAttribute::UV1, ShaderDataType::Float2}
 			});
 		_data->VAO->AddVertexBuffer(vbo);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Raying::Ref<Raying::IndexBuffer> ibo;
-		ibo.reset(Raying::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Ref<IndexBuffer> ibo;
+		ibo.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		_data->VAO->SetIndexBuffer(ibo);
 
-		_data->FlatColorShader = Raying::Shader::Create("assets/shaders/FlatColor.glsl");
-		_data->TextureShader = Raying::Shader::Create("assets/shaders/Texture.glsl");
+		_data->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		_data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+		_data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		_data->TextureShader->Bind();
 		_data->TextureShader->SetInt("u_Texture", 0);
 	}
@@ -57,9 +60,6 @@ namespace Raying {
 
 	void Renderer2D::BeginScene(const OrthographicCamera & camera)
 	{
-		_data->FlatColorShader->Bind();
-		_data->FlatColorShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
-
 		_data->TextureShader->Bind();
 		_data->TextureShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
 	}
@@ -75,11 +75,11 @@ namespace Raying {
 
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const glm::vec4 & color)
 	{
-		_data->FlatColorShader->Bind();
-		_data->FlatColorShader->SetFloat4("u_Color", color);
+		_data->TextureShader->SetFloat4("u_Color", color);
+		_data->WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		_data->FlatColorShader->SetMat4("_Transform", transform);
+		_data->TextureShader->SetMat4("_Transform", transform);
 
 		_data->VAO->Bind();
 		RendererCommand::DrawIndexed(_data->VAO);
@@ -92,12 +92,13 @@ namespace Raying {
 
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Texture2D> texture)
 	{
-		_data->TextureShader->Bind();
+		_data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+
+		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		_data->TextureShader->SetMat4("_Transform", transform);
 
-		texture->Bind();
 
 		_data->VAO->Bind();
 		RendererCommand::DrawIndexed(_data->VAO);
