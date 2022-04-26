@@ -31,8 +31,7 @@ namespace Raying {
 			-0.5f,  0.5f, 0.0f,  0.0f, 1.0f
 		};
 
-		Ref<VertexBuffer> vbo;
-		vbo.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Ref<VertexBuffer> vbo = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		vbo->SetLayout({
 			{ShaderAttribute::Position, ShaderDataType::Float3},
 			{ShaderAttribute::UV1, ShaderDataType::Float2}
@@ -40,8 +39,7 @@ namespace Raying {
 		_data->VAO->AddVertexBuffer(vbo);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> ibo;
-		ibo.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Ref<IndexBuffer> ibo = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		_data->VAO->SetIndexBuffer(ibo);
 
 		_data->WhiteTexture = Texture2D::Create(1, 1);

@@ -17,9 +17,9 @@ namespace Raying
 		Raying_Core_Error("GLFW Error ({0}) : {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -43,7 +43,6 @@ namespace Raying
 		if (_GLFWWindowCount == 0)
 		{
 			// TODO: glfwTerminate on system shutdown
-			Raying_Core_Info("Initializing GLFW!");
 			int success = glfwInit();
 			Raying_Core_Assert(success, "Could not intialize GLFW!");
 
@@ -53,7 +52,7 @@ namespace Raying
 		_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
 		++_GLFWWindowCount;
 
-		_context = CreateScope<OpenGLContext>(_window);
+		_context = GraphicsContext::Create(_window);
 		_context->Init();
 
 		glfwSetWindowUserPointer(_window, &_data);
@@ -154,7 +153,10 @@ namespace Raying
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(_window);
-		if (--_GLFWWindowCount == 0)
+
+		--_GLFWWindowCount;
+
+		if (_GLFWWindowCount == 0)
 		{
 			Raying_Core_Info("Terminate GLFW!");
 			glfwTerminate();

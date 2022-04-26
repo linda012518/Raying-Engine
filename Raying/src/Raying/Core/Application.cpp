@@ -2,14 +2,13 @@
 #include "Application.h"
 #include "Log.h"
 #include "Raying/Renderer/Renderer.h"
+#include "Input.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Raying
 {
-	#define Bind_Event_Fn(x) std::bind(&Application::x, this, std::placeholders::_1)
-
 	Application* Application::_instance = nullptr;
 
 	Application::Application()
@@ -17,14 +16,19 @@ namespace Raying
 		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
 
-		_window = std::unique_ptr<Window>(Window::Create());
-		_window->SetEventCallback(Bind_Event_Fn(OnEvent));
+		_window = Window::Create();
+		_window->SetEventCallback(Raying_Bind_Event_Fn(Application::OnEvent));
 		_window->SetVSync(false);
 
 		Renderer::Init();
 
 		_imguiLayer = new ImGuiLayer();
 		PushLayer(_imguiLayer);
+	}
+
+	Application::~Application()
+	{
+		Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -40,8 +44,8 @@ namespace Raying
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_Fn(OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(Bind_Event_Fn(OnWindowResize));
+		dispatcher.Dispatch<WindowCloseEvent>(Raying_Bind_Event_Fn(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(Application::OnWindowResize));
 
 		for (auto itr = _layerStack.end(); itr != _layerStack.begin(); )
 		{

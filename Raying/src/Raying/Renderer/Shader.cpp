@@ -13,7 +13,7 @@ namespace Raying {
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return std::make_shared<OpenGLShader>(filepath);
+				return CreateRef<OpenGLShader>(filepath);
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
@@ -28,7 +28,7 @@ namespace Raying {
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return std::make_shared<OpenGLShader>(name, vs, fs);
+				return CreateRef<OpenGLShader>(name, vs, fs);
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");

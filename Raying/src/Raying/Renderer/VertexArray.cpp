@@ -13,7 +13,7 @@ namespace Raying {
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return std::make_shared<OpenGLVertexArray>();
+				return CreateRef<OpenGLVertexArray>();
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");

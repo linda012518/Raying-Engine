@@ -3,7 +3,6 @@
 #include "VertexArray.h"
 
 #include "Renderer2D.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Raying {
 
@@ -13,6 +12,11 @@ namespace Raying {
 	{
 		RendererCommand::Init();
 		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -30,11 +34,11 @@ namespace Raying {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vetrexArray, const glm::mat4& transform)
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vetrexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_ViewProjection", _sceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("_Transform", transform);
+		shader->SetMat4("_ViewProjection", _sceneData->ViewProjectionMatrix);
+		shader->SetMat4("_Transform", transform);
 
 		vetrexArray->Bind();
 		RendererCommand::DrawIndexed(vetrexArray);

@@ -3,11 +3,6 @@
 
 namespace Raying
 {
-	LayerStack::LayerStack()
-	{
-
-	}
-
 	LayerStack::~LayerStack()
 	{
 		for (Layer* layer : _layers)

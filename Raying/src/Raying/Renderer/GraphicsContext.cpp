@@ -1,25 +1,23 @@
 #include "hzpch.h"
-#include "RendererAPI.h"
+#include "GraphicsContext.h"
 
-#include "Platform/OpenGL/OpenGLRendererAPI.h"
+#include "Renderer.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Raying {
 
-	RendererAPI::API RendererAPI::_api = RendererAPI::API::OpenGL;
-
-	Scope<RendererAPI> RendererAPI::Create()
+	Scope<GraphicsContext> GraphicsContext::Create(void* window)
 	{
-		switch (_api)
+		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return CreateScope<OpenGLRendererAPI>();
+				return CreateScope<OpenGLContext>(static_cast<GLFWwindow*>(window));
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
 		return nullptr;
 	}
-
 }

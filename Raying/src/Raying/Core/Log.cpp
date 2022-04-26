@@ -1,12 +1,12 @@
 #include "hzpch.h"
 #include "Log.h"
 
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Raying {
 
-	std::shared_ptr<spdlog::logger> Log::_coreLogger;
-	std::shared_ptr<spdlog::logger> Log::_clientLogger;
+	Ref<spdlog::logger> Log::_coreLogger;
+	Ref<spdlog::logger> Log::_clientLogger;
 
 	void Log::Init()
 	{

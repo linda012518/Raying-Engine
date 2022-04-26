@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 
 #ifdef Raying_Platform_Windows
 

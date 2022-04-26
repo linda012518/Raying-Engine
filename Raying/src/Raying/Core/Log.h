@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace Raying {
 
@@ -12,12 +12,12 @@ namespace Raying {
 
 		static void Init();
 		//shared_ptr 允许多个指针指向同一个对象
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return _coreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return _clientLogger; }
+		inline static Ref<spdlog::logger>& GetCoreLogger() { return _coreLogger; }
+		inline static Ref<spdlog::logger>& GetClientLogger() { return _clientLogger; }
 
 	private:
-		static std::shared_ptr<spdlog::logger> _coreLogger;
-		static std::shared_ptr<spdlog::logger> _clientLogger;
+		static Ref<spdlog::logger> _coreLogger;
+		static Ref<spdlog::logger> _clientLogger;
 
 	};
 

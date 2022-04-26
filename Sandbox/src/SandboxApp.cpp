@@ -1,9 +1,8 @@
 
 #include <Raying.h>
 #include <Raying/Core/EntryPoint.h>
-#include <Platform/OpenGL/OpenGLShader.h>
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,8 +23,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
 		};
 
-		Raying::Ref<Raying::VertexBuffer> vbo;
-		vbo.reset(Raying::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Raying::Ref<Raying::VertexBuffer> vbo = Raying::VertexBuffer::Create(vertices, sizeof(vertices));
 		Raying::BufferLayout layout = {
 			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3},
 			{Raying::ShaderAttribute::Color, Raying::ShaderDataType::Float4}
@@ -34,8 +32,7 @@ public:
 		_vao->AddVertexBuffer(vbo);
 
 		unsigned int indices[3] = { 0, 1, 2 };
-		Raying::Ref<Raying::IndexBuffer> ibo;
-		ibo.reset(Raying::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Raying::Ref<Raying::IndexBuffer> ibo = Raying::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		_vao->SetIndexBuffer(ibo);
 
 
@@ -46,8 +43,7 @@ public:
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
-		Raying::Ref<Raying::VertexBuffer> vbo2;
-		vbo2.reset(Raying::VertexBuffer::Create(blue, sizeof(blue)));
+		Raying::Ref<Raying::VertexBuffer> vbo2 = Raying::VertexBuffer::Create(blue, sizeof(blue));
 		Raying::BufferLayout layout2 = {
 			{Raying::ShaderAttribute::Position, Raying::ShaderDataType::Float3},
 			{Raying::ShaderAttribute::UV1, Raying::ShaderDataType::Float2}
@@ -56,8 +52,7 @@ public:
 		_blue_vao->AddVertexBuffer(vbo2);
 
 		unsigned int blueIndex[6] = { 0, 1, 2, 2, 3, 0 };
-		Raying::Ref<Raying::IndexBuffer> ibo2;
-		ibo2.reset(Raying::IndexBuffer::Create(blueIndex, sizeof(blueIndex) / sizeof(uint32_t)));
+		Raying::Ref<Raying::IndexBuffer> ibo2 = Raying::IndexBuffer::Create(blueIndex, sizeof(blueIndex) / sizeof(uint32_t));
 		_blue_vao->SetIndexBuffer(ibo2);
 
 
@@ -138,8 +133,8 @@ public:
 
 		_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
 		_logoTexture = Raying::Texture2D::Create("assets/textures/Logo.png");
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		textureShader->Bind();
+		textureShader->SetInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Raying::Timestep ts) override
@@ -151,8 +146,8 @@ public:
 
 		Raying::Renderer::BeginScene(_cameraCtrl.GetCamera());
 
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->Bind();
-		std::dynamic_pointer_cast<Raying::OpenGLShader>(_blueShader)->UploadUniformFloat3("u_Color", _color);
+		_blueShader->Bind();
+		_blueShader->SetFloat3("u_Color", _color);
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 

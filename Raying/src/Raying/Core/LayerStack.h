@@ -10,7 +10,7 @@ namespace Raying
 	class Raying_API LayerStack
 	{
 	public:
-		LayerStack();
+		LayerStack() = default;
 		virtual ~LayerStack();
 
 		void PushLayer(Layer* layer);

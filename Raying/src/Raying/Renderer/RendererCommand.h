@@ -31,7 +31,7 @@ namespace Raying {
 			_rendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vetrexArray)
+		inline static void DrawIndexed(const Ref<VertexArray>& vetrexArray)
 		{
 			_rendererAPI->DrawIndexed(vetrexArray);
 		}
