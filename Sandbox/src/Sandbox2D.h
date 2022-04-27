@@ -23,14 +23,6 @@ private:
 
 	Raying::Ref<Raying::Texture2D> _texture;
 
-	struct ProfileResult
-	{
-		const char* Name;
-		float Time;
-	};
-
-	std::vector<ProfileResult> _profileResults;
-
 	glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 
 };

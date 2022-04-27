@@ -15,6 +15,8 @@
 
 #include "Raying/Core/Log.h"
 
+#include "Raying/Debug/Instrumentor.h"
+
 #ifdef Raying_Platform_Windows
 	#include <Windows.h>
 #endif // !Raying_Platform_Windows
