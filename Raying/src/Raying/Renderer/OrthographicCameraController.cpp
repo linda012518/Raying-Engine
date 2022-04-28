@@ -13,6 +13,8 @@ namespace Raying {
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+		Raying_Profile_FUNCTION();
+
 		if (Input::IsKeyPressed(RAYING_KEY_A))
 		{
 			_cameraPosition.x -= cos(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
@@ -57,6 +59,8 @@ namespace Raying {
 
 	void OrthographicCameraController::OnEvent(Event & e)
 	{
+		Raying_Profile_FUNCTION();
+
 		EventDispatcher dispathcer(e);
 		dispathcer.Dispatch<MouseScrolledEvent>(Raying_Bind_Event_Fn(OrthographicCameraController::OnMouseScrolled));
 		dispathcer.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(OrthographicCameraController::OnWindowResized));
@@ -64,6 +68,8 @@ namespace Raying {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent & e)
 	{
+		Raying_Profile_FUNCTION();
+
 		_zoomLevel -= e.GetYOffset() *0.25f;
 		_zoomLevel = std::max(_zoomLevel, 0.25f);
 
@@ -74,6 +80,8 @@ namespace Raying {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent & e)
 	{
+		Raying_Profile_FUNCTION();
+
 		_aspecRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		_camera.SetPorjection(-_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel);
 

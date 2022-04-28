@@ -28,26 +28,36 @@ namespace Raying {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		Raying_Profile_FUNCTION();
+
 		glCreateVertexArrays(1, &_rendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		Raying_Profile_FUNCTION();
+
 		glDeleteVertexArrays(1, &_rendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindVertexArray(_rendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& buffer)
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindVertexArray(_rendererID);
 		buffer->Bind();
 
@@ -67,6 +77,8 @@ namespace Raying {
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& buffer)
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindVertexArray(_rendererID);
 		buffer->Bind();
 

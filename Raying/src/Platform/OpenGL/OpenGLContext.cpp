@@ -13,6 +13,8 @@ namespace Raying
 
 	void OpenGLContext::Init()
 	{
+		Raying_Profile_FUNCTION();
+
 		glfwMakeContextCurrent(_windowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		Raying_Core_Assert(status, "Failed to initialize Glad!");
@@ -34,6 +36,8 @@ namespace Raying
 
 	void OpenGLContext::SwapBuffers()
 	{
+		Raying_Profile_FUNCTION();
+
 		glfwSwapBuffers(_windowHandle);
 	}
 

@@ -13,6 +13,8 @@ namespace Raying
 
 	Application::Application()
 	{
+		Raying_Profile_FUNCTION();
+
 		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
 
@@ -28,21 +30,31 @@ namespace Raying
 
 	Application::~Application()
 	{
+		Raying_Profile_FUNCTION();
+
 		Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
+		Raying_Profile_FUNCTION();
+
 		_layerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		Raying_Profile_FUNCTION();
+
 		_layerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		Raying_Profile_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(Raying_Bind_Event_Fn(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(Application::OnWindowResize));
@@ -57,22 +69,33 @@ namespace Raying
 
 	void Application::Run()
 	{
+		Raying_Profile_FUNCTION();
+
 		while (_running)
 		{			
+			Raying_Profile_SCOPE("RunLoop");
+
 			float time = (float)glfwGetTime();
 			Timestep ts = time - _lastFrameTime;
 			_lastFrameTime = time;
 
 			if (!_minimized) 
 			{
-				for (Layer* layer : _layerStack)
-					layer->OnUpdate(ts);
-			}
+				{
+					Raying_Profile_SCOPE("layerStack OnUpdate");
+					for (Layer* layer : _layerStack)
+						layer->OnUpdate(ts);
+				}
 
-			_imguiLayer->Begin();
-			for (Layer* layer : _layerStack)
-				layer->OnImGuiRender();
-			_imguiLayer->End();
+				_imguiLayer->Begin();
+				{
+					Raying_Profile_SCOPE("layerStack OnImGuiRender");
+					for (Layer* layer : _layerStack)
+						layer->OnImGuiRender();
+				}
+				_imguiLayer->End();
+
+			}
 
 			_window->OnUpdate();
 		}
@@ -86,6 +109,8 @@ namespace Raying
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		Raying_Profile_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			_minimized = true;

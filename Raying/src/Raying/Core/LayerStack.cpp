@@ -16,13 +16,11 @@ namespace Raying
 	{
 		_layers.emplace(_layers.begin() + _layerInsert, layer);
 		_layerInsert++;
-		layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		_layers.emplace_back(overlay);
-		overlay->OnAttach();
 	}
 
 	void LayerStack::PopLayer(Layer* layer)

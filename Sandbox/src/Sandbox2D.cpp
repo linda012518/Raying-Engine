@@ -12,21 +12,21 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	Raying_Profile_FUNCTION();
+
 	_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
+	Raying_Profile_FUNCTION();
 }
 
 void Sandbox2D::OnUpdate(Raying::Timestep ts)
 {
 	Raying_Profile_FUNCTION();
-	// Update
-	{
-		Raying_Profile_SCOPE("CameraController::OnUpdate");
-		_cameraCtrl.OnUpdate(ts);
-	}
+
+	_cameraCtrl.OnUpdate(ts);
 
 	// Render
 	{

@@ -8,6 +8,8 @@ namespace Raying {
 	/// vertex buffer ////////////////////////////////////////////////////
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float * vertices, uint32_t size)
 	{
+		Raying_Profile_FUNCTION();
+
 		glCreateBuffers(1, &_rendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -15,16 +17,22 @@ namespace Raying {
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
+		Raying_Profile_FUNCTION();
+
 		glDeleteBuffers(1, &_rendererID);
 	}
 
 	void OpenGLVertexBuffer::Bind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererID);
 	}
 
 	void OpenGLVertexBuffer::Unbind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
@@ -32,6 +40,8 @@ namespace Raying {
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t * indices, uint32_t count)
 		: _count(count)
 	{
+		Raying_Profile_FUNCTION();
+
 		glCreateBuffers(1, &_rendererID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _rendererID); // 也可以用 GL_ARRAY_BUFFER
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW); // 也可以用 GL_ARRAY_BUFFER
@@ -39,16 +49,22 @@ namespace Raying {
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
+		Raying_Profile_FUNCTION();
+
 		glDeleteBuffers(1, &_rendererID);
 	}
 
 	void OpenGLIndexBuffer::Bind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _rendererID);
 	}
 
 	void OpenGLIndexBuffer::Unbind() const
 	{
+		Raying_Profile_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 

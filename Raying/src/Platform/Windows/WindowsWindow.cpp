@@ -24,16 +24,22 @@ namespace Raying
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		Raying_Profile_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		Raying_Profile_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		Raying_Profile_FUNCTION();
+
 		_data.Title = props.Title;
 		_data.Width = props.Width;
 		_data.Height = props.Height;
@@ -42,6 +48,7 @@ namespace Raying
 
 		if (_GLFWWindowCount == 0)
 		{
+			Raying_Profile_SCOPE("glfwInit");
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
 			Raying_Core_Assert(success, "Could not intialize GLFW!");
@@ -49,8 +56,11 @@ namespace Raying
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-		_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
-		++_GLFWWindowCount;
+		{
+			Raying_Profile_SCOPE("glfwCreateWindow");
+			_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
+			++_GLFWWindowCount;
+		}
 
 		_context = GraphicsContext::Create(_window);
 		_context->Init();
@@ -152,6 +162,8 @@ namespace Raying
 
 	void WindowsWindow::Shutdown()
 	{
+		Raying_Profile_FUNCTION();
+
 		glfwDestroyWindow(_window);
 
 		--_GLFWWindowCount;
@@ -165,12 +177,16 @@ namespace Raying
 
 	void WindowsWindow::OnUpdate()
 	{
+		Raying_Profile_FUNCTION();
+
 		glfwPollEvents();
 		_context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		Raying_Profile_FUNCTION();
+
 		if (enabled)
 			glfwSwapInterval(1);
 		else

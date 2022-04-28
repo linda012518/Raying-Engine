@@ -10,6 +10,8 @@ namespace Raying {
 
 	void Renderer::Init()
 	{
+		Raying_Profile_FUNCTION();
+
 		RendererCommand::Init();
 		Renderer2D::Init();
 	}

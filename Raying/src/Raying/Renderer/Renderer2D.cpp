@@ -20,6 +20,8 @@ namespace Raying {
 
 	void Renderer2D::Init()
 	{
+		Raying_Profile_FUNCTION();
+
 		_data = new Renderer2DSorage();
 
 		_data->VAO = VertexArray::Create();
@@ -53,17 +55,23 @@ namespace Raying {
 
 	void Renderer2D::Shutdown()
 	{
+		Raying_Profile_FUNCTION();
+
 		delete _data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera & camera)
 	{
+		Raying_Profile_FUNCTION();
+
 		_data->TextureShader->Bind();
 		_data->TextureShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
+		Raying_Profile_FUNCTION();
+
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2 & position, const glm::vec2 & size, const glm::vec4 & color)
@@ -73,6 +81,8 @@ namespace Raying {
 
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const glm::vec4 & color)
 	{
+		Raying_Profile_FUNCTION();
+
 		_data->TextureShader->SetFloat4("u_Color", color);
 		_data->WhiteTexture->Bind();
 
@@ -90,6 +100,8 @@ namespace Raying {
 
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Texture2D> texture)
 	{
+		Raying_Profile_FUNCTION();
+
 		_data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
 
 		texture->Bind();
