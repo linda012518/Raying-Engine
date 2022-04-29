@@ -5,3 +5,7 @@
 *.vcxproj
 *.filters
 *.user
+
+RayingProfile-Runtime.json
+RayingProfile-Shutdown.json
+RayingProfile-Startup.json
