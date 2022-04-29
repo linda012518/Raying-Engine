@@ -5,6 +5,8 @@
 #include "Raying/Events/MouseEvent.h"
 #include "Raying/Events/KeyEvent.h"
 
+#include "Raying/Renderer/Renderer.h"
+
 #include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Raying
@@ -58,6 +60,10 @@ namespace Raying
 
 		{
 			Raying_Profile_SCOPE("glfwCreateWindow");
+#if defined(Raying_Debug)
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
 			_window = glfwCreateWindow((int)props.Width, (int)props.Height, _data.Title.c_str(), nullptr, nullptr);
 			++_GLFWWindowCount;
 		}
