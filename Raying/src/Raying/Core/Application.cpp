@@ -59,9 +59,9 @@ namespace Raying
 		dispatcher.Dispatch<WindowCloseEvent>(Raying_Bind_Event_Fn(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(Application::OnWindowResize));
 
-		for (auto itr = _layerStack.end(); itr != _layerStack.begin(); )
+		for (auto itr = _layerStack.rbegin(); itr != _layerStack.rend(); ++itr)
 		{
-			(*--itr)->OnEvent(e);
+			(*itr)->OnEvent(e);
 			if (e.Handled)
 				break;
 		}
