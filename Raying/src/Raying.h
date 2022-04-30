@@ -10,7 +10,7 @@
 
 #include "Raying/Core/Input.h"
 #include "Raying/Core/KeyCodes.h"
-#include "Raying/Core/MouseButtonCodes.h"
+#include "Raying/Core/MouseCodes.h"
 
 
 #include "Raying/ImGui/ImGuiLayer.h"
