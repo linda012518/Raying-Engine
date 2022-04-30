@@ -11,6 +11,8 @@
 
 #include "Raying/ImGui/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Raying {
 
 	class Raying_API Application
@@ -18,8 +20,6 @@ namespace Raying {
 	public:
 		Application();
 		virtual ~Application();
-
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -30,6 +30,7 @@ namespace Raying {
 
 		inline static Application& Get() { return *_instance; }
 	private:
+		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
@@ -43,7 +44,7 @@ namespace Raying {
 		float _lastFrameTime = 0.0f;
 
 		static Application* _instance;
-
+		friend int ::main(int argc, char** argv);
 	};
 
 	Application* CreateApplication();
