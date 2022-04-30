@@ -6,8 +6,6 @@
 
 namespace Raying
 {
-	Scope<Input> Input::_instance = CreateScope<WindowsInput>();
-
 	bool WindowsInput::IsKeyPressedImpl(KeyCode keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

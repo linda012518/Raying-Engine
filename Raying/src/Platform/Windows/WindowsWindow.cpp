@@ -21,11 +21,6 @@ namespace Raying
 		Raying_Core_Error("GLFW Error ({0}) : {1}", error, description);
 	}
 
-	Scope<Window> Window::Create(const WindowProps& props)
-	{
-		return CreateScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Raying_Profile_FUNCTION();

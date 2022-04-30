@@ -31,6 +31,7 @@ namespace Raying
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
 
+		static Scope<Input> Create();
 	private:
 		static Scope<Input> _instance;
 	};
