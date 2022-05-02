@@ -84,6 +84,7 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		_data->TextureShader->SetFloat4("u_Color", color);
+		_data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		_data->WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -93,20 +94,63 @@ namespace Raying {
 		RendererCommand::DrawIndexed(_data->VAO);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2 & position, const glm::vec2 & size, const Ref<Texture2D> texture)
+	void Renderer2D::DrawQuad(const glm::vec2 & position, const glm::vec2 & size, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4& tintColor)
 	{
-		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, texture);
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Texture2D> texture)
+	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		Raying_Profile_FUNCTION();
 
-		_data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		_data->TextureShader->SetFloat4("u_Color", tintColor);
+		_data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 
 		texture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		_data->TextureShader->SetMat4("_Transform", transform);
+
+
+		_data->VAO->Bind();
+		RendererCommand::DrawIndexed(_data->VAO);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const glm::vec4 & color)
+	{
+		DrawRotatedQuad(glm::vec3(position.x, position.y, 0.0f), size, rotation, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const glm::vec4 & color)
+	{
+		Raying_Profile_FUNCTION();
+
+		_data->TextureShader->SetFloat4("u_Color", color);
+		_data->TextureShader->SetFloat("u_TilingFactor", 1.0f);
+		_data->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		_data->TextureShader->SetMat4("_Transform", transform);
+
+		_data->VAO->Bind();
+		RendererCommand::DrawIndexed(_data->VAO);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor)
+	{
+		DrawRotatedQuad(glm::vec3(position.x, position.y, 0.0f), size, rotation, texture, tilingFactor, tintColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor)
+	{
+		Raying_Profile_FUNCTION();
+
+		_data->TextureShader->SetFloat4("u_Color", tintColor);
+		_data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
+
+		texture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		_data->TextureShader->SetMat4("_Transform", transform);
 
 
