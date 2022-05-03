@@ -58,9 +58,11 @@ namespace Raying {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vetrexArray)
+	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vetrexArray, uint32_t count)
 	{
-		glDrawElements(GL_TRIANGLES, vetrexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		uint32_t indexCount = count == 0 ? vetrexArray->GetIndexBuffer()->GetCount() : count;
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 }

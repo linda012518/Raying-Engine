@@ -31,9 +31,9 @@ namespace Raying {
 			_rendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vetrexArray)
+		inline static void DrawIndexed(const Ref<VertexArray>& vetrexArray, uint32_t count = 0)
 		{
-			_rendererAPI->DrawIndexed(vetrexArray);
+			_rendererAPI->DrawIndexed(vetrexArray, count);
 		}
 
 	private:

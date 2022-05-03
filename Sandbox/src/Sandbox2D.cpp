@@ -38,9 +38,10 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 	{
 		Raying_Profile_SCOPE("Renderer Draw");
 		Raying::Renderer2D::BeginScene(_cameraCtrl.GetCamera());
-		Raying::Renderer2D::DrawRotatedQuad({ -0.8f,  0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), _color);
+		//Raying::Renderer2D::DrawRotatedQuad({ -0.8f,  0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), _color);
+		Raying::Renderer2D::DrawQuad({ -0.8f,  0.0f }, { 0.8f, 0.8f }, _color);
 		Raying::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.2f, 0.6f }, { 0.1f, 0.6f, 0.1f, 1 });
-		Raying::Renderer2D::DrawQuad({ -0.5f, 0.5f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
+		//Raying::Renderer2D::DrawQuad({ -0.5f, 0.5f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
 		Raying::Renderer2D::EndScene();
 	}
 

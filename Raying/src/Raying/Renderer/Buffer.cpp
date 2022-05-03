@@ -6,6 +6,21 @@
 
 namespace Raying {
 
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None:
+				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
+				return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLVertexBuffer>(size);
+		}
+
+		Raying_Core_Assert(false, "Unknow RendererAPI!");
+		return nullptr;
+	}
+
 	Ref<VertexBuffer> VertexBuffer::Create(float * vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
@@ -21,7 +36,7 @@ namespace Raying {
 		return nullptr;
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t * indices, uint32_t size)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t * indices, uint32_t count)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -29,7 +44,7 @@ namespace Raying {
 				Raying_Core_Assert(false, "RendererAPI::Nono is currently not support~");
 				return nullptr;
 			case RendererAPI::API::OpenGL:
-				return CreateRef<OpenGLIndexBuffer>(indices, size);
+				return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
 		Raying_Core_Assert(false, "Unknow RendererAPI!");
