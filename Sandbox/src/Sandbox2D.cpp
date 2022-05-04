@@ -36,13 +36,16 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 	}
 
 	{
+		static float rotation = 0.0f;
+		rotation += ts * 50.0f;
+
 		Raying_Profile_SCOPE("Renderer Draw");
 		Raying::Renderer2D::BeginScene(_cameraCtrl.GetCamera());
-		Raying::Renderer2D::DrawRotatedQuad({ -0.8f,  0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), _color);
-		Raying::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, _color);
+		Raying::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Raying::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Raying::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-		Raying::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
-		Raying::Renderer2D::DrawQuad({ -0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f }, _texture, 20.0f);
+		Raying::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
+		Raying::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _texture, 20.0f);
 		Raying::Renderer2D::EndScene();
 	}
 
