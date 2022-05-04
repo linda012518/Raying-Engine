@@ -18,6 +18,11 @@ namespace Raying {
 
 		virtual void Bind(uint32_t slot = 0) const override;
 
+		virtual bool operator == (const Texture& other) const override
+		{
+			return _rendererID == ((OpenGLTexture&)other)._rendererID;
+		}
+
 	private:
 		std::string _path;
 		uint32_t _width, _height;
