@@ -58,6 +58,8 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		glCreateBuffers(1, &_rendererID);
+		//如果没绑定VAO，GL_ELEMENT_ARRAY_BUFFER将是无效的
+		//绑定GL_ARRAY_BUFFER，可以不管VAO的状态，都可以加载数据
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _rendererID); // 也可以用 GL_ARRAY_BUFFER
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW); // 也可以用 GL_ARRAY_BUFFER
 	}

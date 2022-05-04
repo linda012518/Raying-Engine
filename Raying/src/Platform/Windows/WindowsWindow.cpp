@@ -50,7 +50,7 @@ namespace Raying
 			Raying_Profile_SCOPE("glfwInit");
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
-			Raying_Core_Assert(success, "Could not intialize GLFW!");
+			Raying_Core_Assert(success, "Could not initialize GLFW!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
