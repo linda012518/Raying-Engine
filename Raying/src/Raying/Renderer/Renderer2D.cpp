@@ -38,6 +38,8 @@ namespace Raying {
 		uint32_t TextureSlotIndex = 1;
 
 		glm::vec4 QuadVertexPositions[4];
+
+		Renderer2D::Statistics Stats;
 	};
 
 	static Renderer2DData _data;
@@ -136,6 +138,18 @@ namespace Raying {
 			_data.TextureSlots[i]->Bind(i);
 
 		RendererCommand::DrawIndexed(_data.VAO, _data.QuadIndexCount);
+
+		_data.Stats.DrawCalls++;
+	}
+
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+
+		_data.QuadIndexCount = 0;
+		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
+
+		_data.TextureSlotIndex = 1;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2 & position, const glm::vec2 & size, const glm::vec4 & color)
@@ -146,6 +160,9 @@ namespace Raying {
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const glm::vec4 & color)
 	{
 		Raying_Profile_FUNCTION();
+
+		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
+			FlushAndReset();
 
 		const float texIndex = 0.0f;
 		const float tilingFactor = 1.0f;
@@ -182,6 +199,8 @@ namespace Raying {
 
 		_data.QuadIndexCount += 6;
 
+		_data.Stats.QuadCount++;
+
 		//_data.TextureShader->SetFloat4("u_Color", color);
 		//_data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
 		//_data.WhiteTexture->Bind();
@@ -201,6 +220,9 @@ namespace Raying {
 	void Renderer2D::DrawQuad(const glm::vec3 & position, const glm::vec2 & size, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		Raying_Profile_FUNCTION();
+
+		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
+			FlushAndReset();
 
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -253,7 +275,7 @@ namespace Raying {
 
 		_data.QuadIndexCount += 6;
 
-
+		_data.Stats.QuadCount++;
 
 		//_data.TextureShader->SetFloat4("u_Color", tintColor);
 		//_data.TextureShader->SetFloat("u_TilingFactor", tilingFactor);
@@ -277,6 +299,9 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
+		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
+			FlushAndReset();
+
 		const float texIndex = 0.0f;
 		const float tilingFactor = 1.0f;
 
@@ -312,6 +337,7 @@ namespace Raying {
 
 		_data.QuadIndexCount += 6;
 
+		_data.Stats.QuadCount++;
 
 		//_data.TextureShader->SetFloat4("u_Color", color);
 		//_data.TextureShader->SetFloat("u_TilingFactor", 1.0f);
@@ -332,6 +358,9 @@ namespace Raying {
 	void Renderer2D::DrawRotatedQuad(const glm::vec3 & position, const glm::vec2 & size, float rotation, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor)
 	{
 		Raying_Profile_FUNCTION();
+
+		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
+			FlushAndReset();
 
 		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -384,6 +413,8 @@ namespace Raying {
 
 		_data.QuadIndexCount += 6;
 
+		_data.Stats.QuadCount++;
+
 		//_data.TextureShader->SetFloat4("u_Color", tintColor);
 		//_data.TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 
@@ -396,5 +427,17 @@ namespace Raying {
 		//_data.VAO->Bind();
 		//RendererCommand::DrawIndexed(_data.VAO);
 	}
+
+	void Renderer2D::ResetStats()
+	{
+		memset(&_data.Stats, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return _data.Stats;
+	}
+
+
 
 }

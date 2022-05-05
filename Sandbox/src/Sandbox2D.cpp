@@ -29,6 +29,7 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 	_cameraCtrl.OnUpdate(ts);
 
 	// Render
+	Raying::Renderer2D::ResetStats();
 	{
 		Raying_Profile_SCOPE("Renderer Prep");
 		Raying::RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
@@ -47,6 +48,18 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 		Raying::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
 		Raying::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _texture, 20.0f);
 		Raying::Renderer2D::EndScene();
+
+		Raying::Renderer2D::BeginScene(_cameraCtrl.GetCamera());
+		
+		for (float x = -5.0f; x < 5.0f; x += 0.5f)
+		{
+			for (float y = -5.0f; y < 5.0f; y += 0.5f)
+			{
+				Raying::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, _color);
+			}
+		}
+
+		Raying::Renderer2D::EndScene();
 	}
 
 
@@ -57,6 +70,14 @@ void Sandbox2D::OnImGuiRender()
 	Raying_Profile_FUNCTION();
 
 	ImGui::Begin("Settings");
+
+	auto stats = Raying::Renderer2D::GetStats();
+	ImGui::Text("Renderer2D Stats : ");
+	ImGui::Text("Draw Calls : %d", stats.DrawCalls);
+	ImGui::Text("Quad : %d", stats.QuadCount);
+	ImGui::Text("Vertices : %d", stats.GetTotalVertexCount());
+	ImGui::Text("Indices : %d", stats.GetTotalIndexCount());
+
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(_color));
 	ImGui::End();
 }
