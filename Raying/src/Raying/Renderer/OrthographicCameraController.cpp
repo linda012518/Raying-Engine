@@ -7,7 +7,8 @@
 namespace Raying {
 
 	OrthographicCameraController::OrthographicCameraController(float aspecRatio, bool rotation)
-		: _aspecRatio(aspecRatio), _camera(-_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel), _rotation(rotation)
+		: _aspecRatio(aspecRatio), m_Bounds({ -_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel }), 
+		_camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top), _rotation(rotation)
 	{
 	}
 
@@ -73,7 +74,9 @@ namespace Raying {
 		_zoomLevel -= e.GetYOffset() *0.25f;
 		_zoomLevel = std::max(_zoomLevel, 0.25f);
 
-		_camera.SetPorjection(-_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel);
+		m_Bounds = { -_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel };
+
+		_camera.SetPorjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 
 		return false;
 	}
@@ -83,7 +86,10 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		_aspecRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		_camera.SetPorjection(-_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel);
+
+		m_Bounds = { -_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel };
+
+		_camera.SetPorjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 
 		return false;
 	}

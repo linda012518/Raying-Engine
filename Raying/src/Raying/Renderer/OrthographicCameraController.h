@@ -9,6 +9,15 @@
 
 namespace Raying {
 
+	struct OrthographicCameraBounds
+	{
+		float Left, Right;
+		float Bottom, Top;
+
+		float GetWidth() { return Right - Left; }
+		float GetHeight() { return Top - Bottom; }
+	};
+
 	class Raying_API OrthographicCameraController
 	{
 	public:
@@ -23,6 +32,8 @@ namespace Raying {
 		float GetZoomLevel() const { return _zoomLevel; }
 		void SetZoomLevel(float level) { _zoomLevel = level; }
 
+		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
+
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
@@ -30,6 +41,7 @@ namespace Raying {
 	private:
 		float _aspecRatio;
 		float _zoomLevel = 1.0f;
+		OrthographicCameraBounds m_Bounds;
 		OrthographicCamera _camera;
 
 		bool _rotation;
