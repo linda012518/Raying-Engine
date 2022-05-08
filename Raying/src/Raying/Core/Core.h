@@ -58,12 +58,23 @@
 #endif // Raying_Platform_Windows
 
 #ifdef Raying_Debug
+	#if defined(Raying_Platform_Windows)
+		#define Raying_DebugBreak() __debugbreak()
+	#elif defined(Raying_Platform_LINUX)
+		#include <signal.h>
+		#define Raying_DebugBreak() raise(SIGTRAP)
+	#else
+		#error "Platform doesn't support debugbreak yet!"
+	#endif
+
 	#define Raying_Enable_Asserts
+#else
+	#define Raying_DebugBreak()
 #endif
 
 #ifdef Raying_Enable_Asserts
-	#define Raying_Assert(x, ...) { if(!(x)) { Raying_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define Raying_Core_Assert(x, ...) { if(!(x)) { Raying_Core_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define Raying_Assert(x, ...) { if(!(x)) { Raying_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
+	#define Raying_Core_Assert(x, ...) { if(!(x)) { Raying_Core_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
 #else
 	#define Raying_Assert(x, ...)
 	#define Raying_Core_Assert(x, ...)
