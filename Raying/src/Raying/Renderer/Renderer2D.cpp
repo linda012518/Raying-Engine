@@ -136,6 +136,9 @@ namespace Raying {
 
 	void Renderer2D::Flush()
 	{
+		if (_data.QuadIndexCount == 0)
+			return;
+
 		for (uint32_t i = 0; i < _data.TextureSlotIndex; i++)
 			_data.TextureSlots[i]->Bind(i);
 

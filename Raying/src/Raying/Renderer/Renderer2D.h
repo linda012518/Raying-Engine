@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Raying/Core/Core.h"
+#include "Raying/Core/Base.h"
 #include "OrthographicCamera.h"
 
 #include "Texture.h"

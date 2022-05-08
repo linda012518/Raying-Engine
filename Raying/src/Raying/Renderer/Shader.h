@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Raying/Core/Core.h"
+#include "Raying/Core/Base.h"
 
 namespace Raying {
 

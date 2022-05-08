@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "Raying/Core/Core.h"
+#include "Raying/Core/Base.h"
 #include "Buffer.h"
 
 namespace Raying {
