@@ -107,6 +107,8 @@ namespace Raying {
 	void Renderer2D::Shutdown()
 	{
 		Raying_Profile_FUNCTION();
+
+		delete[] _data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera & camera)
@@ -126,7 +128,7 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		uint32_t dataSize = (uint8_t*)_data.QuadVertexBufferPtr - (uint8_t*)_data.QuadVertexBufferBase;
+		uint32_t dataSize = (uint32_t)((uint8_t*)_data.QuadVertexBufferPtr - (uint8_t*)_data.QuadVertexBufferBase);
 		_data.VBO->SetData(_data.QuadVertexBufferBase, dataSize);
 
 		Flush();
@@ -197,7 +199,6 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		constexpr size_t vertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		constexpr glm::vec2 texcoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
@@ -228,7 +229,7 @@ namespace Raying {
 		for (size_t i = 0; i < vertexCount; i++)
 		{
 			_data.QuadVertexBufferPtr->Position = transform * _data.QuadVertexPositions[i];
-			_data.QuadVertexBufferPtr->Color = color;
+			_data.QuadVertexBufferPtr->Color = tintColor;
 			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
 			_data.QuadVertexBufferPtr->TexIndex = texIndex;
 			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
@@ -284,7 +285,6 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		constexpr size_t vertexCount = 4;
-		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		constexpr glm::vec2 texcoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
@@ -315,7 +315,7 @@ namespace Raying {
 		for (size_t i = 0; i < vertexCount; i++)
 		{
 			_data.QuadVertexBufferPtr->Position = transform * _data.QuadVertexPositions[i];
-			_data.QuadVertexBufferPtr->Color = color;
+			_data.QuadVertexBufferPtr->Color = tintColor;
 			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
 			_data.QuadVertexBufferPtr->TexIndex = texIndex;
 			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
