@@ -60,7 +60,7 @@ namespace Raying {
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vetrexArray, uint32_t count)
 	{
-		uint32_t indexCount = count == 0 ? vetrexArray->GetIndexBuffer()->GetCount() : count;
+		uint32_t indexCount = count ? count : vetrexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
