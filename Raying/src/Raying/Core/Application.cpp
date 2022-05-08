@@ -51,6 +51,11 @@ namespace Raying
 		layer->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		_running = false;
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		Raying_Profile_FUNCTION();

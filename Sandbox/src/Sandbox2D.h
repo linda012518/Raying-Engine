@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Raying.h>
-#include "ParticleSystem.h"
+//#include "ParticleSystem.h"
 
 class Sandbox2D : public Raying::Layer
 {
@@ -26,6 +26,6 @@ private:
 
 	glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 
-	ParticleProps m_Particle;
-	ParticleSystem m_ParticleSystem;
+	//ParticleProps m_Particle;
+	//ParticleSystem m_ParticleSystem;
 };

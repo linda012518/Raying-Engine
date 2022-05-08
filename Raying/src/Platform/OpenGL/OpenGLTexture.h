@@ -13,6 +13,7 @@ namespace Raying {
 
 		virtual uint32_t GetWidth() const override { return _width; }
 		virtual uint32_t GetHeight() const override { return _height; }
+		virtual uint32_t GetRendererID() const override { return _rendererID; }
 
 		virtual void SetData(void* data, uint32_t size) override;
 

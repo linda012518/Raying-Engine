@@ -28,6 +28,8 @@ namespace Raying {
 
 		inline Window& GetWindow() { return *_window; }
 
+		void Close();
+
 		inline static Application& Get() { return *_instance; }
 	private:
 		void Run();
