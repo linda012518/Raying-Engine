@@ -65,8 +65,8 @@ namespace Raying {
 				case Raying::ShaderDataType::Int2:		return 2;
 				case Raying::ShaderDataType::Int3:		return 3;
 				case Raying::ShaderDataType::Int4:		return 4;
-				case Raying::ShaderDataType::Mat3:		return 3 * 3;
-				case Raying::ShaderDataType::Mat4:		return 4 * 4;
+				case Raying::ShaderDataType::Mat3:		return 3;// 3 * 3;
+				case Raying::ShaderDataType::Mat4:		return 4;// 4 * 4;
 				case Raying::ShaderDataType::Bool:		return 1;
 			}
 
@@ -99,6 +99,7 @@ namespace Raying {
 			_stride = 0;
 			for (auto& element : _elements)
 			{
+				//矩阵需要是最后一个输入，因为没控制Index
 				element.Offset = _stride;
 				element.Index = index++;
 				_stride += element.Size;

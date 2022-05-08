@@ -64,6 +64,48 @@ namespace Raying {
 		const BufferLayout& layout = buffer->GetLayout();
 		for (const BufferElement& element : layout)
 		{
+			switch (element.Type)
+			{
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4:
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Bool:
+			{
+				glEnableVertexAttribArray(element.Index);
+				glVertexAttribPointer(
+					element.Index, element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.Type),
+					element.Normalized ? GL_TRUE : GL_FALSE,
+					layout.GetStride(), (const void*)(intptr_t)element.Offset);
+				break;
+			}
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
+			{
+				//矩阵需要是最后一个输入，因为没控制Index
+				uint8_t count = element.GetComponentCount();
+				for (uint8_t i = 0; i < count; i++)
+				{
+					glEnableVertexAttribArray(element.Index + i);
+					glVertexAttribPointer(
+						element.Index + i, count,
+						ShaderDataTypeToOpenGLBaseType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(), (const void*)(sizeof(float) * count * i));
+					glVertexAttribDivisor(element.Index + i, 1);
+				}
+				break;
+			}
+			default:
+				Raying_Core_Assert(false, "Unknown ShaderDataType!");
+			}
+
+
 			glEnableVertexAttribArray(element.Index);
 			glVertexAttribPointer(
 				element.Index, element.GetComponentCount(),
