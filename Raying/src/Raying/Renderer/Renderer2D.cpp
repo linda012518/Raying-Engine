@@ -215,6 +215,9 @@ namespace Raying {
 
 		if (texIndex == 0.0f)
 		{
+			if (_data.TextureSlotIndex >= _data.MaxTextureSlots)
+				FlushAndReset();
+
 			texIndex = (float)_data.TextureSlotIndex;
 			_data.TextureSlots[_data.TextureSlotIndex] = texture;
 			_data.TextureSlotIndex++;
@@ -299,6 +302,9 @@ namespace Raying {
 
 		if (texIndex == 0.0f)
 		{
+			if (_data.TextureSlotIndex >= _data.MaxTextureSlots)
+				FlushAndReset();
+
 			texIndex = (float)_data.TextureSlotIndex;
 			_data.TextureSlots[_data.TextureSlotIndex] = texture;
 			_data.TextureSlotIndex++;
