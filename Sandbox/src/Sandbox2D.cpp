@@ -16,6 +16,12 @@ void Sandbox2D::OnAttach()
 
 	_texture = Raying::Texture2D::Create("assets/textures/Checkerboard.png");
 
+	Raying::FramebufferSpecification spec;
+	spec.Width = 1280;
+	spec.Height = 720;
+
+	_fbo = Raying::Framebuffer::Create(spec);
+
 	//// Init here
 	//m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	//m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -41,6 +47,7 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 	Raying::Renderer2D::ResetStats();
 	{
 		Raying_Profile_SCOPE("Renderer Prep");
+		_fbo->Bind();
 		Raying::RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Raying::RendererCommand::Clear();
 	}
@@ -69,6 +76,7 @@ void Sandbox2D::OnUpdate(Raying::Timestep ts)
 		}
 
 		Raying::Renderer2D::EndScene();
+		_fbo->Unbind();
 	}
 
 
@@ -169,8 +177,8 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(_color));
 
-		uint32_t textureID = _texture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		uint32_t textureID = _fbo->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
 		ImGui::End();
 
 		ImGui::End();
@@ -188,8 +196,8 @@ void Sandbox2D::OnImGuiRender()
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(_color));
 
-		uint32_t textureID = _texture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+		uint32_t textureID = _fbo->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
 		ImGui::End();
 	}
 

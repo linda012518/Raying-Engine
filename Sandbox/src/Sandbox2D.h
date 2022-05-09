@@ -19,6 +19,7 @@ public:
 private:
 	Raying::OrthographicCameraController _cameraCtrl;
 
+	Raying::Ref<Raying::Framebuffer> _fbo;
 	Raying::Ref<Raying::Shader> _shader;
 	Raying::Ref<Raying::VertexArray> _vao;
 
