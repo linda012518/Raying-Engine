@@ -18,7 +18,7 @@ namespace Raying {
 	class Raying_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Raying App");
 		virtual ~Application();
 
 		void OnEvent(Event& e);

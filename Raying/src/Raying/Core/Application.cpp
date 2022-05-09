@@ -11,14 +11,14 @@ namespace Raying
 {
 	Application* Application::_instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		Raying_Profile_FUNCTION();
 
 		Raying_Core_Assert(!_instance, "Application alread exists!");
 		_instance = this;
 
-		_window = Window::Create();
+		_window = Window::Create(WindowProps(name));
 		_window->SetEventCallback(Raying_Bind_Event_Fn(Application::OnEvent));
 		_window->SetVSync(false);
 
