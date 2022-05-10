@@ -66,9 +66,9 @@ namespace Raying
 
 		for (auto itr = _layerStack.rbegin(); itr != _layerStack.rend(); ++itr)
 		{
-			(*itr)->OnEvent(e);
 			if (e.Handled)
 				break;
+			(*itr)->OnEvent(e);
 		}
 	}
 

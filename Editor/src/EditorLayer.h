@@ -26,6 +26,8 @@ namespace Raying {
 
 		Raying::Ref<Raying::Texture2D> _texture;
 
+		glm::vec2 _viewportSize = { 0.0f, 0.0f };
+
 		glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 	};
 }

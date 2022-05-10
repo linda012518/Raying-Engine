@@ -67,6 +67,15 @@ namespace Raying {
 		dispathcer.Dispatch<WindowResizeEvent>(Raying_Bind_Event_Fn(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		_aspecRatio = width / height;
+
+		m_Bounds = { -_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel };
+
+		_camera.SetPorjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent & e)
 	{
 		Raying_Profile_FUNCTION();
@@ -85,11 +94,7 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		_aspecRatio = (float)e.GetWidth() / (float)e.GetHeight();
-
-		m_Bounds = { -_aspecRatio * _zoomLevel, _aspecRatio * _zoomLevel, -_zoomLevel, _zoomLevel };
-
-		_camera.SetPorjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 
 		return false;
 	}

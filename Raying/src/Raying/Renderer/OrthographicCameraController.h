@@ -26,6 +26,8 @@ namespace Raying {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
+		void OnResize(float width, float height);
+
 		OrthographicCamera& GetCamera() { return _camera; }
 		const OrthographicCamera& GetCamera() const { return _camera; }
 

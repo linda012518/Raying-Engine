@@ -14,10 +14,19 @@ namespace Raying {
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &_rendererID);
+		glDeleteTextures(1, &_colorAttachment);
+		glDeleteTextures(1, &_depthAttachment);
 	}
 
 	void OpenGLFramebuffer::Invalidate()
 	{
+		if (_rendererID)
+		{
+			glDeleteFramebuffers(1, &_rendererID);
+			glDeleteTextures(1, &_colorAttachment);
+			glDeleteTextures(1, &_depthAttachment);
+		}
+
 		glCreateFramebuffers(1, &_rendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, _rendererID);
 
@@ -43,11 +52,20 @@ namespace Raying {
 	void OpenGLFramebuffer::Bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, _rendererID);
+		glViewport(0, 0, _specification.Width, _specification.Height);
 	}
 
 	void OpenGLFramebuffer::Unbind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::Resize(float width, float height)
+	{
+		_specification.Width = width;
+		_specification.Height = height;
+
+		Invalidate();
 	}
 
 }
