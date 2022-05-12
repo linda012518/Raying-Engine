@@ -39,6 +39,8 @@ namespace Raying {
 	{
 		//friend class EventDispatcher;//EventDispatcher是Event的好朋友，那么EventDispatcher可以访问Event的私友函数或变量
 	public:
+		virtual ~Event() = default;
+
 		bool Handled = false;
 
 		virtual EventType GetEventType() const = 0;
