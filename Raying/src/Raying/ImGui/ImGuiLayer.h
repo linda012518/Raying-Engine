@@ -22,7 +22,9 @@ namespace Raying
 		void Begin();
 		void End();
 
+		void BlockEvents(bool block) { _blockEvents = block; }
 	private:
+		bool _blockEvents = true;
 		float _time = 0.0f;
 	};
 }

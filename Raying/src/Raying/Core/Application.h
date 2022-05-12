@@ -30,6 +30,8 @@ namespace Raying {
 
 		void Close();
 
+		ImGuiLayer* GetImGuiLayer() { return _imguiLayer; }
+
 		inline static Application& Get() { return *_instance; }
 	private:
 		void Run();
