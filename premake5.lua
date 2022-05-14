@@ -23,6 +23,7 @@ IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
 IncludeDir["ImGui"] = "Raying/vendor/imgui"
 IncludeDir["glm"] = "Raying/vendor/glm"
 IncludeDir["stb_image"] = "Raying/vendor/stb_image"
+IncludeDir["entt"] = "Raying/vendor/entt/include"
 
 group "Dependencies"
 	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
@@ -68,7 +69,8 @@ project "Raying"
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links 
@@ -131,7 +133,8 @@ project "Sandbox"
 		"Raying/vendor/spdlog/include",
 		"Raying/src",
 		"Raying/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -178,7 +181,8 @@ project "Editor"
 		"Raying/vendor/spdlog/include",
 		"Raying/src",
 		"Raying/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

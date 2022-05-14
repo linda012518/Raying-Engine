@@ -23,6 +23,13 @@ namespace Raying {
 		spec.Height = 720;
 
 		_fbo = Framebuffer::Create(spec);
+
+		_activeScene = CreateRef<Scene>();
+
+		auto square = _activeScene->CreateEntity();
+		_activeScene->Reg().emplace<TransformComponent>(square);
+		_activeScene->Reg().emplace<SpriteRendererComponent>(square, glm::vec4(0.0f, 0.3f, 0.0f, 1.0f));
+		_squareEntity = square;
 	}
 
 	void EditorLayer::OnDetach()
@@ -46,32 +53,37 @@ namespace Raying {
 			RendererCommand::Clear();
 		}
 
-		{
-			static float rotation = 0.0f;
-			rotation += ts * 50.0f;
+		//{
+		//	static float rotation = 0.0f;
+		//	rotation += ts * 50.0f;
 
-			Raying_Profile_SCOPE("Renderer Draw");
-			Renderer2D::BeginScene(_cameraCtrl.GetCamera());
-			Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
-			Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _texture, 20.0f);
-			Renderer2D::EndScene();
+		//	Raying_Profile_SCOPE("Renderer Draw");
+		//	Renderer2D::BeginScene(_cameraCtrl.GetCamera());
+		//	Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
+		//	Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		//	Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+		//	Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, _texture, 10.0f);
+		//	Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, _texture, 20.0f);
+		//	Renderer2D::EndScene();
 
-			Renderer2D::BeginScene(_cameraCtrl.GetCamera());
+		//	Renderer2D::BeginScene(_cameraCtrl.GetCamera());
 
-			for (float x = -5.0f; x < 5.0f; x += 0.5f)
-			{
-				for (float y = -5.0f; y < 5.0f; y += 0.5f)
-				{
-					Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, _color);
-				}
-			}
+		//	for (float x = -5.0f; x < 5.0f; x += 0.5f)
+		//	{
+		//		for (float y = -5.0f; y < 5.0f; y += 0.5f)
+		//		{
+		//			Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, _color);
+		//		}
+		//	}
 
-			Renderer2D::EndScene();
-			_fbo->Unbind();
-		}
+		//	Renderer2D::EndScene();
+		//	_fbo->Unbind();
+		//}
+
+		Renderer2D::BeginScene(_cameraCtrl.GetCamera());
+		_activeScene->OnUpdate(ts);
+		Renderer2D::EndScene();
+		_fbo->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -146,7 +158,8 @@ namespace Raying {
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(_color));
+		auto& color = _activeScene->Reg().get<SpriteRendererComponent>(_squareEntity).Color;
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
 
 		ImGui::End();
 
@@ -158,7 +171,7 @@ namespace Raying {
 		Application::Get().GetImGuiLayer()->BlockEvents(!_viewportFocused || !_viewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (_viewportSize != *((glm::vec2*)&viewportPanelSize))
+		if (_viewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 		{
 			_fbo->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };

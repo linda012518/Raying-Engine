@@ -13,18 +13,21 @@ namespace Raying {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
-		virtual void OnUpdate(Raying::Timestep ts) override;
+		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
-		virtual void OnEvent(Raying::Event& e) override;
+		virtual void OnEvent(Event& e) override;
 
 	private:
-		Raying::OrthographicCameraController _cameraCtrl;
+		OrthographicCameraController _cameraCtrl;
 
-		Raying::Ref<Raying::Framebuffer> _fbo;
-		Raying::Ref<Raying::Shader> _shader;
-		Raying::Ref<Raying::VertexArray> _vao;
+		Ref<Framebuffer> _fbo;
+		Ref<Shader> _shader;
+		Ref<VertexArray> _vao;
 
-		Raying::Ref<Raying::Texture2D> _texture;
+		Ref<Scene> _activeScene;
+		entt::entity _squareEntity;
+
+		Ref<Texture2D> _texture;
 
 		bool _viewportFocused = false, _viewportHovered = false;
 

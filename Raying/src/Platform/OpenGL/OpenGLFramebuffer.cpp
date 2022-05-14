@@ -5,6 +5,8 @@
 
 namespace Raying {
 
+	static const uint32_t _MaxFramebufferSize = 8192;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification & spec)
 		: _specification(spec)
 	{
@@ -62,6 +64,11 @@ namespace Raying {
 
 	void OpenGLFramebuffer::Resize(float width, float height)
 	{
+		if (width <= 0 || height <= 0 || width > _MaxFramebufferSize || height > _MaxFramebufferSize)
+		{
+			Raying_Core_Warn("Please resize framebuffer {0}, {1}", width, height);
+			return;
+		}
 		_specification.Width = width;
 		_specification.Height = height;
 
