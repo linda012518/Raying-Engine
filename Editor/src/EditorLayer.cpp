@@ -41,6 +41,13 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
+		FramebufferSpecification spec = _fbo->GetSpecification();
+		if (_viewportSize.x > 0.0f && _viewportSize.y > 0.0f && (spec.Width != _viewportSize.x || spec.Height != _viewportSize.y))
+		{
+			_fbo->Resize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+			_cameraCtrl.OnResize(_viewportSize.x, _viewportSize.y);
+		}
+
 		if (_viewportFocused)
 			_cameraCtrl.OnUpdate(ts);
 
@@ -171,13 +178,8 @@ namespace Raying {
 		Application::Get().GetImGuiLayer()->BlockEvents(!_viewportFocused || !_viewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		if (_viewportSize != *((glm::vec2*)&viewportPanelSize) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
-		{
-			_fbo->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-			_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-			_cameraCtrl.OnResize(viewportPanelSize.x, viewportPanelSize.y);
-		}
 		uint32_t textureID = _fbo->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ _viewportSize.x, _viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();

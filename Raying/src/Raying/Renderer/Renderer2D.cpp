@@ -266,29 +266,9 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		constexpr size_t vertexCount = 4;
-		const float texIndex = 0.0f;
-		constexpr glm::vec2 texcoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-		const float tilingFactor = 1.0f;
-
-		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
-			FlushAndReset();
-
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		for (size_t i = 0; i < vertexCount; i++)
-		{
-			_data.QuadVertexBufferPtr->Position = transform * _data.QuadVertexPositions[i];
-			_data.QuadVertexBufferPtr->Color = color;
-			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
-			_data.QuadVertexBufferPtr->TexIndex = texIndex;
-			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			_data.QuadVertexBufferPtr++;
-		}
-
-		_data.QuadIndexCount += 6;
-
-		_data.Stats.QuadCount++;
+		DrawQuad(transform, color);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2 & position, const glm::vec2 & size, float rotation, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor)
@@ -300,47 +280,9 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		constexpr size_t vertexCount = 4;
-		constexpr glm::vec2 texcoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-
-		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
-			FlushAndReset();
-
-		float texIndex = 0.0f;
-		for (uint32_t i = 1; i < _data.TextureSlotIndex; i++)
-		{
-			if (*_data.TextureSlots[i].get() == *texture.get())
-			{
-				texIndex = (float)i;
-				break;
-			}
-		}
-
-		if (texIndex == 0.0f)
-		{
-			if (_data.TextureSlotIndex >= _data.MaxTextureSlots)
-				FlushAndReset();
-
-			texIndex = (float)_data.TextureSlotIndex;
-			_data.TextureSlots[_data.TextureSlotIndex] = texture;
-			_data.TextureSlotIndex++;
-		}
-
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		for (size_t i = 0; i < vertexCount; i++)
-		{
-			_data.QuadVertexBufferPtr->Position = transform * _data.QuadVertexPositions[i];
-			_data.QuadVertexBufferPtr->Color = tintColor;
-			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
-			_data.QuadVertexBufferPtr->TexIndex = texIndex;
-			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			_data.QuadVertexBufferPtr++;
-		}
-
-		_data.QuadIndexCount += 6;
-
-		_data.Stats.QuadCount++;
+		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
 	void Renderer2D::ResetStats()
