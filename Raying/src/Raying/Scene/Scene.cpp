@@ -4,6 +4,8 @@
 #include "Comonents.h"
 #include "Raying/Renderer/Renderer2D.h"
 
+#include "Entity.h"
+
 namespace Raying {
 
 	static void DoMath(const glm::mat4& transform)
@@ -48,9 +50,17 @@ namespace Raying {
 	{
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return _registry.create();
+		entt::entity e = _registry.create();
+		Entity entity = { _registry.create(), this };
+
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+
+		tag.Tag = name.empty() ? "Entity" : name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(Timestep ts)

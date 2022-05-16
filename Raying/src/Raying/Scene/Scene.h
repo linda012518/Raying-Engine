@@ -6,13 +6,15 @@
 
 namespace Raying {
 
+	class Entity;
+
 	class Scene
 	{
 	public:
 		Scene();
 		~Scene();
 
-		entt::entity CreateEntity();
+		Entity CreateEntity(const std::string& name = std::string());
 
 		entt::registry& Reg() { return _registry; }
 
@@ -20,6 +22,8 @@ namespace Raying {
 
 	private:
 		entt::registry _registry;
+
+		friend class Entity;
 	};
 
 }

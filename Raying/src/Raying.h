@@ -15,8 +15,9 @@
 
 #include "Raying/ImGui/ImGuiLayer.h"
 
-#include "Raying/Scene/Comonents.h"
 #include "Raying/Scene/Scene.h"
+#include "Raying/Scene/Entity.h"
+#include "Raying/Scene/Comonents.h"
 
 #include "Raying/Renderer/Renderer.h"
 #include "Raying/Renderer/Renderer2D.h"

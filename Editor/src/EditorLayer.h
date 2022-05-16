@@ -25,7 +25,7 @@ namespace Raying {
 		Ref<VertexArray> _vao;
 
 		Ref<Scene> _activeScene;
-		entt::entity _squareEntity;
+		Entity _squareEntity;
 
 		Ref<Texture2D> _texture;
 
