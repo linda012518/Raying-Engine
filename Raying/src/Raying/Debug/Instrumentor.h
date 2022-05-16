@@ -27,15 +27,9 @@ namespace Raying {
 
 	class Instrumentor
 	{
-	private:
-		std::mutex m_Mutex;
-		InstrumentationSession* m_CurrentSession;
-		std::ofstream m_OutputStream;
 	public:
-		Instrumentor()
-			: m_CurrentSession(nullptr)
-		{
-		}
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
@@ -102,8 +96,16 @@ namespace Raying {
 			static Instrumentor instance;
 			return instance;
 		}
-
 	private:
+		Instrumentor()
+			: m_CurrentSession(nullptr)
+		{
+		}
+
+		~Instrumentor()
+		{
+			EndSession();
+		}
 
 		void WriteHeader()
 		{
@@ -129,7 +131,10 @@ namespace Raying {
 				m_CurrentSession = nullptr;
 			}
 		}
-
+	private:
+		std::mutex m_Mutex;
+		InstrumentationSession* m_CurrentSession;
+		std::ofstream m_OutputStream;
 	};
 
 	class InstrumentationTimer
@@ -193,7 +198,8 @@ namespace Raying {
 	}
 }
 
-#define Raying_Profile 1
+
+#define Raying_Profile 0
 #if Raying_Profile
 	// Resolve which function signature macro will be used. Note that this only
 	// is resolved when the (pre)compiler starts, so the syntax highlighting
@@ -220,6 +226,12 @@ namespace Raying {
 	#define Raying_Profile_END_SESSION() ::Raying::Instrumentor::Get().EndSession()
 	#define Raying_Profile_SCOPE(name) ::Raying::InstrumentationTimer timer##__LINE__(name);
 	#define Raying_Profile_FUNCTION() Raying_Profile_SCOPE(Raying_FUNC_SIG)
+
+	#define Raying_Profile_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Raying::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+												   ::Raying::InstrumentationTimer timer##line(fixedName##line.Data)
+	#define Raying_Profile_SCOPE_LINE(name, line) Raying_Profile_SCOPE_LINE2(name, line)
+	#define Raying_Profile_SCOPE(name) Raying_Profile_SCOPE_LINE(name, __LINE__)
+	#define Raying_Profile_FUNCTION() Raying_Profile_SCOPE(HZ_FUNC_SIG)
 #else
 	#define Raying_Profile_BEGIN_SESSION(name, filepath)
 	#define Raying_Profile_END_SESSION()
