@@ -40,10 +40,10 @@ namespace Raying {
 			_scene->_registry.remove<T>(_entityHandle);
 		}
 
-		operator bool() const { return _entityHandle != 0; }
+		operator bool() const { return _entityHandle != entt::null; }
 
 	private:
-		entt::entity _entityHandle{ 0 };
+		entt::entity _entityHandle{ entt::null };
 		Scene* _scene = nullptr;
 	};
 
