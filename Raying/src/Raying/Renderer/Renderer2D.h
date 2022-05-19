@@ -2,6 +2,7 @@
 
 #include "Raying/Core/Base.h"
 #include "OrthographicCamera.h"
+#include "Camera.h"
 
 #include "Texture.h"
 
@@ -14,6 +15,7 @@ namespace Raying {
 		static void Shutdown();
 
 		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void EndScene();
 		static void Flush();
 

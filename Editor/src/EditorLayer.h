@@ -26,6 +26,10 @@ namespace Raying {
 
 		Ref<Scene> _activeScene;
 		Entity _squareEntity;
+		Entity _cameraEntity;
+		Entity _secondCameraEntity;
+
+		bool _primoryCamera = true;
 
 		Ref<Texture2D> _texture;
 

@@ -19,9 +19,11 @@ namespace Raying {
 		entt::registry& Reg() { return _registry; }
 
 		void OnUpdate(Timestep ts);
+		void OnViewportResize(uint32_t width, uint32_t height);
 
 	private:
 		entt::registry _registry;
+		uint32_t _width = 0, _height = 0;
 
 		friend class Entity;
 	};

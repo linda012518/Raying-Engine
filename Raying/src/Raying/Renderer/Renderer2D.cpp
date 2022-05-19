@@ -124,6 +124,19 @@ namespace Raying {
 		_data.TextureSlotIndex = 1;
 	}
 
+	void Renderer2D::BeginScene(const Camera & camera, const glm::mat4 & transform)
+	{
+		Raying_Profile_FUNCTION();
+
+		_data.TextureShader->Bind();
+		_data.TextureShader->SetMat4("_ViewProjection", camera.GetProjection() * glm::inverse(transform));
+
+		_data.QuadIndexCount = 0;
+		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
+
+		_data.TextureSlotIndex = 1;
+	}
+
 	void Renderer2D::EndScene()
 	{
 		Raying_Profile_FUNCTION();

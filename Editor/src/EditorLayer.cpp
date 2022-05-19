@@ -29,6 +29,13 @@ namespace Raying {
 		auto square = _activeScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.0f, 0.3f, 0.0f, 1.0f));
 		_squareEntity = square;
+
+		_cameraEntity = _activeScene->CreateEntity("Camera Entity");
+		_cameraEntity.AddComponent<CameraComponent>();
+
+		_secondCameraEntity = _activeScene->CreateEntity("Clip-Space Entity");
+		auto& cc = _secondCameraEntity.AddComponent<CameraComponent>();
+		cc.Primary = false;
 	}
 
 	void EditorLayer::OnDetach()
@@ -45,6 +52,8 @@ namespace Raying {
 		{
 			_fbo->Resize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
 			_cameraCtrl.OnResize(_viewportSize.x, _viewportSize.y);
+
+			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
 		}
 
 		if (_viewportFocused)
@@ -59,9 +68,8 @@ namespace Raying {
 			RendererCommand::Clear();
 		}
 
-		Renderer2D::BeginScene(_cameraCtrl.GetCamera());
 		_activeScene->OnUpdate(ts);
-		Renderer2D::EndScene();
+
 		_fbo->Unbind();
 	}
 
@@ -149,6 +157,19 @@ namespace Raying {
 			ImGui::Separator();
 		}
 
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(_cameraEntity.GetComponent<TransformComponent>().Transform[3]));
+		if (ImGui::Checkbox("Camera A", &_primoryCamera))
+		{
+			_cameraEntity.GetComponent<CameraComponent>().Primary = _primoryCamera;
+			_secondCameraEntity.GetComponent<CameraComponent>().Primary = !_primoryCamera;
+		}
+
+		{
+			auto& camera = _secondCameraEntity.GetComponent<CameraComponent>().Camera;
+			float size = camera.GetOrthographicSize();
+			if (ImGui::DragFloat("Second Camera Ortho Size", &size))
+				camera.SetOrthographicSize(size);
+		}
 
 		ImGui::End();
 
