@@ -65,6 +65,20 @@ namespace Raying {
 
 	void Scene::OnUpdate(Timestep ts)
 	{
+		_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
+			if (!nsc.Instance)
+			{
+				nsc.InstantiateFunction();
+				nsc.Instance->_entity = Entity(entity, this);
+
+				if (nsc.OnCreateFunction)
+					nsc.OnCreateFunction(nsc.Instance);
+			}
+
+			if (nsc.OnUpdateFunction)
+				nsc.OnUpdateFunction(nsc.Instance, ts);
+		});
+
 		Camera* mainCamera = nullptr;
 		glm::mat4* cameraTransform = nullptr;
 

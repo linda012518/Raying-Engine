@@ -17,6 +17,7 @@
 
 #include "Raying/Scene/Scene.h"
 #include "Raying/Scene/Entity.h"
+#include "Raying/Scene/ScriptableEntity.h"
 #include "Raying/Scene/Comonents.h"
 
 #include "Raying/Renderer/Renderer.h"
