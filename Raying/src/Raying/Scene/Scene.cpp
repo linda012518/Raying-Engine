@@ -8,16 +8,6 @@
 
 namespace Raying {
 
-	static void DoMath(const glm::mat4& transform)
-	{
-
-	}
-
-	static void OnTransformConstruct(entt::registry& registry, entt::entity entity)
-	{
-
-	}
-
 	Scene::Scene()
 	{
 #if ENTT_EXAMPLE_CODE
@@ -68,15 +58,13 @@ namespace Raying {
 		_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
 			if (!nsc.Instance)
 			{
-				nsc.InstantiateFunction();
+				nsc.Instance = nsc.InstantiateScript();
 				nsc.Instance->_entity = Entity(entity, this);
 
-				if (nsc.OnCreateFunction)
-					nsc.OnCreateFunction(nsc.Instance);
+				nsc.Instance->OnCreate();
 			}
 
-			if (nsc.OnUpdateFunction)
-				nsc.OnUpdateFunction(nsc.Instance, ts);
+			nsc.Instance->OnUpdate(ts);
 		});
 
 		Camera* mainCamera = nullptr;
@@ -86,7 +74,7 @@ namespace Raying {
 			auto view = _registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
 			{
-				auto& [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
@@ -102,7 +90,7 @@ namespace Raying {
 			auto group = _registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
-				auto&[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
 				Renderer2D::DrawQuad(transform, sprite.Color);
 			}

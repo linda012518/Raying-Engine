@@ -42,6 +42,8 @@ namespace Raying {
 		public:
 			void OnCreate()
 			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				transform[3][0] = rand() % 10 - 5.0f;
 			}
 
 			void OnDestroy()
@@ -65,6 +67,7 @@ namespace Raying {
 		};
 
 		_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		_secondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()
