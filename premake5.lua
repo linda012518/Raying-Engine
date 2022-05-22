@@ -1,12 +1,19 @@
+include "./vendor/premake/premake_customization/solution_items.lua"
+
 workspace "Raying Engine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Editor"
 	
 	configurations
 	{
 		"Debug",
 		"Release",
 		"Dist"
+	}
+
+	solution_items
+	{
+		".editorconfig"
 	}
 
 	flags
@@ -18,192 +25,21 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Raying/vendor/GLFW/include"
-IncludeDir["GLAD"] = "Raying/vendor/GLAD/include"
-IncludeDir["ImGui"] = "Raying/vendor/imgui"
-IncludeDir["glm"] = "Raying/vendor/glm"
-IncludeDir["stb_image"] = "Raying/vendor/stb_image"
-IncludeDir["entt"] = "Raying/vendor/entt/include"
+IncludeDir["GLFW"] = "%{wks.location}/Raying/vendor/GLFW/include"
+IncludeDir["GLAD"] = "%{wks.location}/Raying/vendor/GLAD/include"
+IncludeDir["ImGui"] = "%{wks.location}/Raying/vendor/imgui"
+IncludeDir["glm"] = "%{wks.location}/Raying/vendor/glm"
+IncludeDir["stb_image"] = "%{wks.location}/Raying/vendor/stb_image"
+IncludeDir["entt"] = "%{wks.location}/Raying/vendor/entt/include"
 
 group "Dependencies"
+	include "vendor/premake"
 	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 	include "Raying/vendor/GLAD" 
 	include "Raying/vendor/imgui"
 
 group ""
 
-project "Raying"
-	location "Raying"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	pchheader "hzpch.h"
-	pchsource "Raying/src/hzpch.cpp"
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/vendor/stb_image/**.h",
-		"%{prj.name}/vendor/stb_image/**.cpp",
-		"%{prj.name}/vendor/glm/**.hpp",
-		"%{prj.name}/vendor/glm/**.inl"
-	}
-
-	defines
-	{
-		"_CRT_SECURE_NO_WARNINGS",
-		"GLFW_INCLUDE_NONE"
-	}
-
-	includedirs
-	{
-		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.GLAD}",
-		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
-	}
-
-	links 
-	{ 
-		"GLFW",
-		"GLAD",
-		"ImGui",
-		"opengl32.lib"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-		defines
-		{
-			--"Raying_Build_Dll"
-		}
-
-		--postbuildcommands
-		--{
-		--	("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		--}
-
-	filter "configurations:Debug"
-		defines "Raying_Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "Raying_Release"
-		runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "Raying_Dist"
-		runtime "Release"
-		optimize "on"
-	
-	--filter {"system:windows", "configurations:Release"}
-		--buildoptions "/MDd" --多线程调试MD/MT
-
-project "Sandbox"
-	location "Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"Raying/vendor/spdlog/include",
-		"Raying/src",
-		"Raying/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
-	}
-
-	links
-	{
-		"Raying"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		defines "Raying_Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "Raying_Release"
-		runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "Raying_Dist"
-		runtime "Release"
-		optimize "on"
-
-project "Editor"
-	location "Editor"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++17"
-	staticruntime "on"
-
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-	files
-	{
-		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
-	}
-
-	includedirs
-	{
-		"Raying/vendor/spdlog/include",
-		"Raying/src",
-		"Raying/vendor",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
-	}
-
-	links
-	{
-		"Raying"
-	}
-
-	filter "system:windows"
-		systemversion "latest"
-
-	filter "configurations:Debug"
-		defines "Raying_Debug"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release"
-		defines "Raying_Release"
-		runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "Raying_Dist"
-		runtime "Release"
-		optimize "on"
+include "Raying"
+include "Sandbox"
+include "Editor"
