@@ -16,23 +16,23 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		if (Input::IsKeyPressed(RAYING_KEY_A))
+		if (Input::IsKeyPressed(Key::A))
 		{
 			_cameraPosition.x -= cos(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 			_cameraPosition.y -= sin(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(RAYING_KEY_D))
+		else if (Input::IsKeyPressed(Key::D))
 		{
 			_cameraPosition.x += cos(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 			_cameraPosition.y += sin(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 		}
 
-		if (Input::IsKeyPressed(RAYING_KEY_W))
+		if (Input::IsKeyPressed(Key::W))
 		{
 			_cameraPosition.x += -sin(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 			_cameraPosition.y += cos(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(RAYING_KEY_S))
+		else if (Input::IsKeyPressed(Key::S))
 		{
 			_cameraPosition.x -= -sin(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
 			_cameraPosition.y -= cos(glm::radians(_cameraRotation)) * _cameraTranslationSpeed * ts;
@@ -40,9 +40,9 @@ namespace Raying {
 
 		if (_rotation)
 		{
-			if (Input::IsKeyPressed(RAYING_KEY_Q))
+			if (Input::IsKeyPressed(Key::Q))
 				_cameraRotation += _cameraRotationSpeed * ts;
-			if (Input::IsKeyPressed(RAYING_KEY_E))
+			if (Input::IsKeyPressed(Key::E))
 				_cameraRotation -= _cameraRotationSpeed * ts;
 
 			if (_cameraRotation > 180.0f)

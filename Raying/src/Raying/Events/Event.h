@@ -1,6 +1,8 @@
 #pragma once
 
-#include "hzpch.h"
+#include <functional>
+
+#include "Raying/Debug/Instrumentor.h"
 #include "Raying/Core/Base.h"
 
 namespace Raying {

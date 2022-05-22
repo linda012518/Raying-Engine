@@ -96,7 +96,7 @@ namespace Raying {
 						element.Index + i, count,
 						ShaderDataTypeToOpenGLBaseType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(), (const void*)(sizeof(float) * count * i));
+						layout.GetStride(), (const void*)(element.Offset + sizeof(float) * count * i));
 					glVertexAttribDivisor(element.Index + i, 1);
 				}
 				break;

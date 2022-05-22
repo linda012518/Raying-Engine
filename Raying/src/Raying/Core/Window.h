@@ -1,6 +1,7 @@
 #pragma once
 
-#include "hzpch.h"
+#include <sstream>
+
 #include "Base.h"
 #include "Raying/Events/Event.h"
 
