@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Raying.h>
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Raying {
 
@@ -38,5 +39,7 @@ namespace Raying {
 		glm::vec2 _viewportSize = { 0.0f, 0.0f };
 
 		glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
+
+		SceneHierarchyPanel _sceneHierarchyPanel;
 	};
 }

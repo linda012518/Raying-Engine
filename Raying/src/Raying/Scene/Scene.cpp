@@ -42,7 +42,6 @@ namespace Raying {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
-		entt::entity e = _registry.create();
 		Entity entity = { _registry.create(), this };
 
 		entity.AddComponent<TransformComponent>();

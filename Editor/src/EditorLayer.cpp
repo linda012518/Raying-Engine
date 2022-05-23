@@ -68,6 +68,8 @@ namespace Raying {
 
 		_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		_secondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		_sceneHierarchyPanel.SetContext(_activeScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -167,6 +169,8 @@ namespace Raying {
 
 			ImGui::EndMenuBar();
 		}
+
+		_sceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 
