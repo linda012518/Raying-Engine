@@ -80,7 +80,7 @@ namespace Raying {
 	public:
 		BufferLayout() {}
 
-		BufferLayout(const std::initializer_list<BufferElement>& elements)
+		BufferLayout(std::initializer_list<BufferElement> elements)
 			: _elements(elements)
 		{
 			CalculateStride();

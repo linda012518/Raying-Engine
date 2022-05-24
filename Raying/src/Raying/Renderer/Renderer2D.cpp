@@ -118,10 +118,7 @@ namespace Raying {
 		_data.TextureShader->Bind();
 		_data.TextureShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
 
-		_data.QuadIndexCount = 0;
-		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
-
-		_data.TextureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const Camera & camera, const glm::mat4 & transform)
@@ -131,18 +128,12 @@ namespace Raying {
 		_data.TextureShader->Bind();
 		_data.TextureShader->SetMat4("_ViewProjection", camera.GetProjection() * glm::inverse(transform));
 
-		_data.QuadIndexCount = 0;
-		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
-
-		_data.TextureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::EndScene()
 	{
 		Raying_Profile_FUNCTION();
-
-		uint32_t dataSize = (uint32_t)((uint8_t*)_data.QuadVertexBufferPtr - (uint8_t*)_data.QuadVertexBufferBase);
-		_data.VBO->SetData(_data.QuadVertexBufferBase, dataSize);
 
 		Flush();
 	}
@@ -152,22 +143,15 @@ namespace Raying {
 		if (_data.QuadIndexCount == 0)
 			return;
 
+		uint32_t dataSize = (uint32_t)((uint8_t*)_data.QuadVertexBufferPtr - (uint8_t*)_data.QuadVertexBufferBase);
+		_data.VBO->SetData(_data.QuadVertexBufferBase, dataSize);
+
 		for (uint32_t i = 0; i < _data.TextureSlotIndex; i++)
 			_data.TextureSlots[i]->Bind(i);
 
 		RendererCommand::DrawIndexed(_data.VAO, _data.QuadIndexCount);
 
 		_data.Stats.DrawCalls++;
-	}
-
-	void Renderer2D::FlushAndReset()
-	{
-		EndScene();
-
-		_data.QuadIndexCount = 0;
-		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
-
-		_data.TextureSlotIndex = 1;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2 & position, const glm::vec2 & size, const glm::vec4 & color)
@@ -208,7 +192,7 @@ namespace Raying {
 		const float tilingFactor = 1.0f;
 
 		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		for (size_t i = 0; i < vertexCount; i++)
 		{
@@ -233,7 +217,7 @@ namespace Raying {
 		constexpr glm::vec2 texcoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		if (_data.Stats.GetTotalIndexCount() >= _data.MaxIndices)
-			FlushAndReset();
+			NextBatch();
 
 		float texIndex = 0.0f;
 		for (uint32_t i = 1; i < _data.TextureSlotIndex; i++)
@@ -248,7 +232,7 @@ namespace Raying {
 		if (texIndex == 0.0f)
 		{
 			if (_data.TextureSlotIndex >= _data.MaxTextureSlots)
-				FlushAndReset();
+				NextBatch();
 
 			texIndex = (float)_data.TextureSlotIndex;
 			_data.TextureSlots[_data.TextureSlotIndex] = texture;
@@ -306,6 +290,20 @@ namespace Raying {
 	Renderer2D::Statistics Renderer2D::GetStats()
 	{
 		return _data.Stats;
+	}
+
+	void Renderer2D::StartBatch()
+	{
+		_data.QuadIndexCount = 0;
+		_data.QuadVertexBufferPtr = _data.QuadVertexBufferBase;
+
+		_data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::NextBatch()
+	{
+		Flush();
+		StartBatch();
 	}
 
 
