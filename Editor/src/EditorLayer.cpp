@@ -30,10 +30,10 @@ namespace Raying {
 		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.0f, 0.3f, 0.0f, 1.0f));
 		_squareEntity = square;
 
-		_cameraEntity = _activeScene->CreateEntity("Camera Entity");
+		_cameraEntity = _activeScene->CreateEntity("Camera A");
 		_cameraEntity.AddComponent<CameraComponent>();
 
-		_secondCameraEntity = _activeScene->CreateEntity("Clip-Space Entity");
+		_secondCameraEntity = _activeScene->CreateEntity("Camera B");
 		auto& cc = _secondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
 
@@ -172,7 +172,7 @@ namespace Raying {
 
 		_sceneHierarchyPanel.OnImGuiRender();
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Stats");
 
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -180,32 +180,6 @@ namespace Raying {
 		ImGui::Text("Quads: %d", stats.QuadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-		if (_squareEntity)
-		{
-			ImGui::Separator();
-			auto& tag = _squareEntity.GetComponent<TagComponent>().Tag;
-
-			ImGui::Text("%s", tag.c_str());
-
-			auto& color = _squareEntity.GetComponent<SpriteRendererComponent>().Color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
-			ImGui::Separator();
-		}
-
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(_cameraEntity.GetComponent<TransformComponent>().Transform[3]));
-		if (ImGui::Checkbox("Camera A", &_primoryCamera))
-		{
-			_cameraEntity.GetComponent<CameraComponent>().Primary = _primoryCamera;
-			_secondCameraEntity.GetComponent<CameraComponent>().Primary = !_primoryCamera;
-		}
-
-		{
-			auto& camera = _secondCameraEntity.GetComponent<CameraComponent>().Camera;
-			float size = camera.GetOrthographicSize();
-			if (ImGui::DragFloat("Second Camera Ortho Size", &size))
-				camera.SetOrthographicSize(size);
-		}
 
 		ImGui::End();
 
