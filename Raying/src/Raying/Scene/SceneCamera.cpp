@@ -12,9 +12,19 @@ namespace Raying {
 
 	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
 	{
+		_projectionType = ProjectionType::Orthographic;
 		_orthographicSize = size;
 		_orthographicNear = nearClip;
 		_orthographicFar = farClip;
+		RecalculateProjection();
+	}
+
+	void SceneCamera::SetPerspective(float verticalFov, float nearClip, float farClip)
+	{
+		_projectionType = ProjectionType::Perspective;
+		_perspectiveFOV = verticalFov;
+		_perspectiveNear = nearClip;
+		_perspectiveFar = farClip;
 		RecalculateProjection();
 	}
 
@@ -26,12 +36,20 @@ namespace Raying {
 
 	void SceneCamera::RecalculateProjection()
 	{
-		float left = -_orthographicSize * _aspectRatio * 0.5f;
-		float right = _orthographicSize * _aspectRatio * 0.5f;
-		float bottom = -_orthographicSize * 0.5f;
-		float top = _orthographicSize * 0.5f;
+		if (_projectionType == ProjectionType::Orthographic)
+		{
+			float left = -_orthographicSize * _aspectRatio * 0.5f;
+			float right = _orthographicSize * _aspectRatio * 0.5f;
+			float bottom = -_orthographicSize * 0.5f;
+			float top = _orthographicSize * 0.5f;
 
-		_projection = glm::ortho(left, right, bottom, top, _orthographicNear, _orthographicFar);
+			_projection = glm::ortho(left, right, bottom, top, _orthographicNear, _orthographicFar);
+		}
+		else if (_projectionType == ProjectionType::Perspective)
+		{
+			_projection = glm::perspective(_perspectiveFOV, _aspectRatio, _perspectiveNear, _perspectiveNear);
+		}
+
 	}
 
 }
