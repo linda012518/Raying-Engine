@@ -5,6 +5,7 @@
 #include "Raying/Core/Application.h"
 #include "Raying/Core/Layer.h"
 #include "Raying/Core/Log.h"
+#include "Raying/Core/Assert.h"
 
 #include "Raying/Core/Timestep.h"
 

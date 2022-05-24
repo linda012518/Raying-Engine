@@ -33,13 +33,16 @@
 	#define Raying_DebugBreak()
 #endif
 
-#ifdef Raying_Enable_Asserts
-	#define Raying_Assert(x, ...) { if(!(x)) { Raying_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
-	#define Raying_Core_Assert(x, ...) { if(!(x)) { Raying_Core_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
-#else
-	#define Raying_Assert(x, ...)
-	#define Raying_Core_Assert(x, ...)
-#endif
+//#ifdef Raying_Enable_Asserts
+//	#define Raying_Assert(x, ...) { if(!(x)) { Raying_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
+//	#define Raying_Core_Assert(x, ...) { if(!(x)) { Raying_Core_Error("Assertion Failed: {0}", __VA_ARGS__); Raying_DebugBreak(); } }
+//#else
+//	#define Raying_Assert(x, ...)
+//	#define Raying_Core_Assert(x, ...)
+//#endif
+
+#define Raying_Expand_Macro(x) x
+#define Raying_StringFY_Macro(x) #x
 
 #define BIT(x) (1 << x)
 
@@ -63,3 +66,6 @@ namespace Raying
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
+
+#include "Log.h"
+#include "Assert.h"
