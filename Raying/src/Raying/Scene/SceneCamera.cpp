@@ -47,7 +47,7 @@ namespace Raying {
 		}
 		else if (_projectionType == ProjectionType::Perspective)
 		{
-			_projection = glm::perspective(_perspectiveFOV, _aspectRatio, _perspectiveNear, _perspectiveNear);
+			_projection = glm::perspective(_perspectiveFOV, _aspectRatio, _perspectiveNear, _perspectiveFar);
 		}
 
 	}
