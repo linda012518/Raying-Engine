@@ -23,6 +23,8 @@ namespace Raying
 		void End();
 
 		void BlockEvents(bool block) { _blockEvents = block; }
+
+		void SetDarkThemeColors();
 	private:
 		bool _blockEvents = true;
 		float _time = 0.0f;
