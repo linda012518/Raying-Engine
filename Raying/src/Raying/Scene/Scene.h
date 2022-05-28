@@ -31,6 +31,7 @@ namespace Raying {
 		uint32_t _width = 0, _height = 0;
 
 		friend class Entity;
+		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;
 	};
 

@@ -31,12 +31,14 @@ IncludeDir["ImGui"] = "%{wks.location}/Raying/vendor/imgui"
 IncludeDir["glm"] = "%{wks.location}/Raying/vendor/glm"
 IncludeDir["stb_image"] = "%{wks.location}/Raying/vendor/stb_image"
 IncludeDir["entt"] = "%{wks.location}/Raying/vendor/entt/include"
+IncludeDir["yaml"] = "%{wks.location}/Raying/vendor/yaml-cpp/include"
 
 group "Dependencies"
 	include "vendor/premake"
 	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 	include "Raying/vendor/GLAD" 
 	include "Raying/vendor/imgui"
+	include "Raying/vendor/yaml-cpp"
 
 group ""
 

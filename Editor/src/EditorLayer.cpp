@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Raying/Scene/SceneSerializer.h"
+
 namespace Raying {
 
 	EditorLayer::EditorLayer()
@@ -26,6 +28,7 @@ namespace Raying {
 
 		_activeScene = CreateRef<Scene>();
 
+#if 0
 		auto square = _activeScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.0f, 0.3f, 0.0f, 1.0f));
 		_squareEntity = square;
@@ -68,6 +71,7 @@ namespace Raying {
 
 		_cameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		_secondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 
 		_sceneHierarchyPanel.SetContext(_activeScene);
 	}
@@ -169,6 +173,18 @@ namespace Raying {
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer serialize(_activeScene);
+					serialize.Serialize("assets/scenes/Example.linda");
+				}
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer serialize(_activeScene);
+					serialize.DeSerialize("assets/scenes/Example.linda");
+				}
+
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();

@@ -10,3 +10,6 @@
 [submodule "Raying/vendor/glm"]
 	path = Raying/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Raying/vendor/yaml-cpp"]
+	path = Raying/vendor/yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp
