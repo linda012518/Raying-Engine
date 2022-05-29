@@ -5,6 +5,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
+#include <cstring>
+
+/* The Microsoft C++ compiler is non-compliant with the C++ standard and needs
+ * the following definition to disable a security warning on std::strncpy().
+ */
+#ifdef _MSVC_LANG
+	#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 namespace Raying {
 
@@ -204,7 +212,7 @@ namespace Raying {
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
-			strcpy_s(buffer, sizeof(buffer), tag.c_str());
+			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
@@ -222,13 +230,19 @@ namespace Raying {
 		{
 			if (ImGui::MenuItem("Camera"))
 			{
-				_selectionContext.AddComponent<CameraComponent>();
+				if (!_selectionContext.HasComponent<CameraComponent>())
+					_selectionContext.AddComponent<CameraComponent>();
+				else
+					Raying_Core_Warn("This entity already has the Camera Component!");
 				ImGui::CloseCurrentPopup();
 			}
 
 			if (ImGui::MenuItem("Sprite Renderer"))
 			{
-				_selectionContext.AddComponent<SpriteRendererComponent>();
+				if (!_selectionContext.HasComponent<SpriteRendererComponent>())
+					_selectionContext.AddComponent<SpriteRendererComponent>();
+				else
+					Raying_Core_Warn("This entity already has the Sprite Renderer Component!");
 				ImGui::CloseCurrentPopup();
 			}
 
