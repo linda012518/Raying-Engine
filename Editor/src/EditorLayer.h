@@ -19,6 +19,14 @@ namespace Raying {
 		virtual void OnEvent(Event& e) override;
 
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveScene();
+		void SaveSceneAs();
+
+	private:
 		OrthographicCameraController _cameraCtrl;
 
 		Ref<Framebuffer> _fbo;
@@ -41,5 +49,7 @@ namespace Raying {
 		glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 
 		SceneHierarchyPanel _sceneHierarchyPanel;
+
+		std::string _currentScenePath = std::string();
 	};
 }

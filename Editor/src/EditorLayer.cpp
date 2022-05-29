@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Raying/Scene/SceneSerializer.h"
+#include "Raying/Utils/PlatformUtils.h"
 
 namespace Raying {
 
@@ -174,17 +175,17 @@ namespace Raying {
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-				if (ImGui::MenuItem("Serialize"))
-				{
-					SceneSerializer serialize(_activeScene);
-					serialize.Serialize("assets/scenes/Example.linda");
-				}
-				if (ImGui::MenuItem("Deserialize"))
-				{
-					SceneSerializer serialize(_activeScene);
-					serialize.DeSerialize("assets/scenes/Example.linda");
-				}
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
 
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save...", "Ctrl+S"))
+					SaveScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneAs();
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
@@ -228,6 +229,96 @@ namespace Raying {
 	void EditorLayer::OnEvent(Event & e)
 	{
 		_cameraCtrl.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(Raying_Bind_Event_Fn(EditorLayer::OnKeyPressed));
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent & e)
+	{
+		// Shortcuts
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+		switch (e.GetKeyCode())
+		{
+			case Key::N:
+			{
+				if (control)
+					NewScene();
+				break;
+			}
+			case Key::O:
+			{
+				if (control)
+					OpenScene();
+				break;
+			}
+			case Key::S:
+			{
+				if (control && shift)
+					SaveSceneAs();
+				else if (control)
+				{
+					if(_currentScenePath.empty())
+						SaveSceneAs();
+					else
+						SaveScene();
+				}
+				break;
+			}
+		}
+
+		return true;
+	}
+
+	void EditorLayer::NewScene()
+	{
+		_activeScene = CreateRef<Scene>();
+		_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+		_sceneHierarchyPanel.SetContext(_activeScene);
+
+		_currentScenePath = std::string();
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Raying Scene (*.linda)\0*.linda\0");
+		if (!filepath.empty())
+		{
+			_activeScene = CreateRef<Scene>();
+			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+			_sceneHierarchyPanel.SetContext(_activeScene);
+
+			SceneSerializer serialize(_activeScene);
+			serialize.DeSerialize(filepath);
+
+			_currentScenePath = filepath;
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		SceneSerializer serialize(_activeScene);
+		serialize.Serialize(_currentScenePath);
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Raying Scene (*.linda)\0*.linda\0");
+		if (!filepath.empty())
+		{
+			int ret = filepath.find(".linda");
+			if (ret == -1)
+			{
+				filepath += ".linda";
+			}
+			SceneSerializer serialize(_activeScene);
+			serialize.Serialize(filepath);
+			_currentScenePath = filepath;
+		}
 	}
 
 }
