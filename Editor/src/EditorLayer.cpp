@@ -285,17 +285,17 @@ namespace Raying {
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = FileDialogs::OpenFile("Raying Scene (*.linda)\0*.linda\0");
-		if (!filepath.empty())
+		std::optional<std::string> filepath = FileDialogs::OpenFile("Raying Scene (*.linda)\0*.linda\0");
+		if (filepath)
 		{
 			_activeScene = CreateRef<Scene>();
 			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
 			_sceneHierarchyPanel.SetContext(_activeScene);
 
 			SceneSerializer serialize(_activeScene);
-			serialize.DeSerialize(filepath);
+			serialize.DeSerialize(*filepath);
 
-			_currentScenePath = filepath;
+			_currentScenePath = *filepath;
 		}
 	}
 
@@ -307,8 +307,8 @@ namespace Raying {
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = FileDialogs::SaveFile("Raying Scene (*.linda)\0*.linda\0");
-		if (!filepath.empty())
+		std::optional<std::string> filepath = FileDialogs::SaveFile("Raying Scene (*.linda)\0*.linda\0");
+		if (filepath)
 		{
 			//int ret = filepath.find(".linda");
 			//if (ret == -1)
@@ -316,8 +316,8 @@ namespace Raying {
 			//	filepath += ".linda";
 			//}
 			SceneSerializer serialize(_activeScene);
-			serialize.Serialize(filepath);
-			_currentScenePath = filepath;
+			serialize.Serialize(*filepath);
+			_currentScenePath = *filepath;
 		}
 	}
 
