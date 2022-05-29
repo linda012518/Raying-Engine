@@ -310,11 +310,11 @@ namespace Raying {
 		std::string filepath = FileDialogs::SaveFile("Raying Scene (*.linda)\0*.linda\0");
 		if (!filepath.empty())
 		{
-			int ret = filepath.find(".linda");
-			if (ret == -1)
-			{
-				filepath += ".linda";
-			}
+			//int ret = filepath.find(".linda");
+			//if (ret == -1)
+			//{
+			//	filepath += ".linda";
+			//}
 			SceneSerializer serialize(_activeScene);
 			serialize.Serialize(filepath);
 			_currentScenePath = filepath;
