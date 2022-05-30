@@ -19,7 +19,8 @@ project "Editor"
 		"%{wks.location}/Raying/src",
 		"%{wks.location}/Raying/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

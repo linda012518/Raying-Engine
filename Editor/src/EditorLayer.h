@@ -48,6 +48,8 @@ namespace Raying {
 
 		glm::vec4 _color = { 0.2f, 0.3f, 0.4f, 1.0f };
 
+		int _gizmoType = -1;
+
 		SceneHierarchyPanel _sceneHierarchyPanel;
 
 		std::string _currentScenePath = std::string();

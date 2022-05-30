@@ -13,3 +13,6 @@
 [submodule "Raying/vendor/yaml-cpp"]
 	path = Raying/vendor/yaml-cpp
 	url = https://github.com/TheCherno/yaml-cpp
+[submodule "Raying/vendor/ImGuizmo"]
+	path = Raying/vendor/ImGuizmo
+	url = https://github.com/TheCherno/ImGuizmo

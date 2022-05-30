@@ -24,6 +24,7 @@ namespace Raying {
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& context)
 	{
 		_context = context;
+		_selectionContext = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()

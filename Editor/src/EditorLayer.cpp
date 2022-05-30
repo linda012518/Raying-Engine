@@ -7,6 +7,8 @@
 
 #include "Raying/Scene/SceneSerializer.h"
 #include "Raying/Utils/PlatformUtils.h"
+#include "Raying/Math/Math.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 namespace Raying {
 
@@ -212,13 +214,61 @@ namespace Raying {
 
 		_viewportFocused = ImGui::IsWindowFocused();
 		_viewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!_viewportFocused || !_viewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!_viewportFocused && !_viewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		_viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 		uint64_t textureID = _fbo->GetColorAttachmentRendererID();
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ _viewportSize.x, _viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		Entity selectedEntity = _sceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity && _gizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float width = (float)ImGui::GetWindowWidth();
+			float height = (float)ImGui::GetWindowHeight();
+
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, width, height);
+
+			auto cameraEntity = _activeScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			// Entity transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			// Snapping
+			bool snap = Input::IsKeyPressed(Key::LeftControl);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			// Snap to 45 degrees for rotation
+			if (_gizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+
+				glm::vec3 deltaRotation = rotation - tc.Rotation;
+				tc.Position = translation;
+				tc.Rotation += deltaRotation;
+				tc.Scale = scale;
+			}
+
+			
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -269,6 +319,20 @@ namespace Raying {
 				}
 				break;
 			}
+
+			// Gizmos
+			case Key::Q:
+				_gizmoType = -1;
+				break;
+			case Key::W:
+				_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			case Key::E:
+				_gizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			case Key::R:
+				_gizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
 		}
 
 		return true;
