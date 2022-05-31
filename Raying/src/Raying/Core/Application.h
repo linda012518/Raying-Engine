@@ -39,7 +39,7 @@ namespace Raying {
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
-		std::unique_ptr<Window> _window;//unique_ptr 独占所指向的对象
+		Scope<Window> _window;//unique_ptr 独占所指向的对象
 		ImGuiLayer* _imguiLayer;
 		bool _running = true;
 		bool _minimized = false; // 最小化
