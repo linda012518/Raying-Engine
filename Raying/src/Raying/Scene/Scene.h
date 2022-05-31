@@ -1,8 +1,9 @@
 #pragma once
 
-#include "entt.hpp"
-
 #include "Raying/Core/Timestep.h"
+#include "Raying/Renderer/EditorCamera.h"
+
+#include "entt.hpp"
 
 namespace Raying {
 
@@ -19,7 +20,8 @@ namespace Raying {
 
 		entt::registry& Reg() { return _registry; }
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCameraEntity();

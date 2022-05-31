@@ -131,6 +131,16 @@ namespace Raying {
 		StartBatch();
 	}
 
+	void Renderer2D::BeginScene(const EditorCamera & camera)
+	{
+		Raying_Profile_FUNCTION();
+
+		_data.TextureShader->Bind();
+		_data.TextureShader->SetMat4("_ViewProjection", camera.GetViewProjection());
+
+		StartBatch();
+	}
+
 	void Renderer2D::EndScene()
 	{
 		Raying_Profile_FUNCTION();

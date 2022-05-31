@@ -2,6 +2,7 @@
 
 #include <Raying.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include "Raying/Renderer/EditorCamera.h"
 
 namespace Raying {
 
@@ -39,6 +40,8 @@ namespace Raying {
 		Entity _secondCameraEntity;
 
 		bool _primoryCamera = true;
+
+		EditorCamera _editorCamera;
 
 		Ref<Texture2D> _texture;
 

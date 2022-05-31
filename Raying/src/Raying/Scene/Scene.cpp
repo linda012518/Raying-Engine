@@ -57,7 +57,7 @@ namespace Raying {
 		_registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) {
 			if (!nsc.Instance)
@@ -101,6 +101,21 @@ namespace Raying {
 
 			Renderer2D::EndScene();
 		}
+	}
+
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera & camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		auto group = _registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto[transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+
+		Renderer2D::EndScene();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

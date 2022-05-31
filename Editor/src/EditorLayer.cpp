@@ -31,6 +31,8 @@ namespace Raying {
 
 		_activeScene = CreateRef<Scene>();
 
+		_editorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
 #if 0
 		auto square = _activeScene->CreateEntity("Green Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4(0.0f, 0.3f, 0.0f, 1.0f));
@@ -95,10 +97,14 @@ namespace Raying {
 			_cameraCtrl.OnResize(_viewportSize.x, _viewportSize.y);
 
 			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+
+			_editorCamera.SetViewportSize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
 		}
 
 		if (_viewportFocused)
 			_cameraCtrl.OnUpdate(ts);
+
+		_editorCamera.OnUpdate(ts);
 
 		// Render
 		Renderer2D::ResetStats();
@@ -109,7 +115,7 @@ namespace Raying {
 			RendererCommand::Clear();
 		}
 
-		_activeScene->OnUpdate(ts);
+		_activeScene->OnUpdateEditor(ts, _editorCamera);
 
 		_fbo->Unbind();
 	}
@@ -233,10 +239,13 @@ namespace Raying {
 
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, width, height);
 
-			auto cameraEntity = _activeScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			//auto cameraEntity = _activeScene->GetPrimaryCameraEntity();
+			//const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			//const glm::mat4& cameraProjection = camera.GetProjection();
+			//glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			const glm::mat4& cameraProjection = _editorCamera.GetProjection();
+			glm::mat4 cameraView = _editorCamera.GetViewMatrix();
 
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
@@ -279,6 +288,7 @@ namespace Raying {
 	void EditorLayer::OnEvent(Event & e)
 	{
 		_cameraCtrl.OnEvent(e);
+		_editorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(Raying_Bind_Event_Fn(EditorLayer::OnKeyPressed));
