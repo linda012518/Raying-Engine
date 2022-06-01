@@ -18,13 +18,18 @@ namespace Raying {
 
 		virtual void Resize(float width, float height) override;
 
-		virtual uint32_t GetColorAttachmentRendererID() const override { return _colorAttachment; }
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { Raying_Core_Assert(index < _colorAttachments.size()); return _colorAttachments[index]; }
 		virtual const FramebufferSpecification& GetSpecification() const override { return _specification; }
 
 	private:
 		uint32_t _rendererID = 0;
-		uint32_t _colorAttachment = 0, _depthAttachment = 0;
 		FramebufferSpecification _specification;
+
+		std::vector<FramebufferTextureSpecification> _colorAttachmentSpecifications;
+		FramebufferTextureSpecification _depthAttachmentSpecification = FramebufferTextureFormat::None;
+
+		std::vector<uint32_t> _colorAttachments;
+		uint32_t _depthAttachment = 0;
 	};
 
 }
