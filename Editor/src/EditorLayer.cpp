@@ -24,6 +24,7 @@ namespace Raying {
 		_texture = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FramebufferSpecification spec;
+		spec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		spec.Width = 1280;
 		spec.Height = 720;
 
