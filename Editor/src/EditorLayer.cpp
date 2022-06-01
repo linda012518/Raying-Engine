@@ -333,16 +333,20 @@ namespace Raying {
 
 			// Gizmos
 			case Key::Q:
-				_gizmoType = -1;
+				if (!ImGuizmo::IsUsing())
+					_gizmoType = -1;
 				break;
 			case Key::W:
-				_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				if (!ImGuizmo::IsUsing())
+					_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
 				break;
 			case Key::E:
-				_gizmoType = ImGuizmo::OPERATION::ROTATE;
+				if (!ImGuizmo::IsUsing())
+					_gizmoType = ImGuizmo::OPERATION::ROTATE;
 				break;
 			case Key::R:
-				_gizmoType = ImGuizmo::OPERATION::SCALE;
+				if (!ImGuizmo::IsUsing())
+					_gizmoType = ImGuizmo::OPERATION::SCALE;
 				break;
 		}
 

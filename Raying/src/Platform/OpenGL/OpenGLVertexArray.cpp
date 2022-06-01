@@ -70,6 +70,15 @@ namespace Raying {
 			case ShaderDataType::Float2:
 			case ShaderDataType::Float3:
 			case ShaderDataType::Float4:
+			{
+				glEnableVertexAttribArray(element.Index);
+				glVertexAttribPointer(
+					element.Index, element.GetComponentCount(),
+					ShaderDataTypeToOpenGLBaseType(element.Type),
+					element.Normalized ? GL_TRUE : GL_FALSE,
+					layout.GetStride(), (const void*)(intptr_t)element.Offset);
+				break;
+			}
 			case ShaderDataType::Int:
 			case ShaderDataType::Int2:
 			case ShaderDataType::Int3:
@@ -77,10 +86,9 @@ namespace Raying {
 			case ShaderDataType::Bool:
 			{
 				glEnableVertexAttribArray(element.Index);
-				glVertexAttribPointer(
+				glVertexAttribIPointer(
 					element.Index, element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.Type),
-					element.Normalized ? GL_TRUE : GL_FALSE,
 					layout.GetStride(), (const void*)(intptr_t)element.Offset);
 				break;
 			}
