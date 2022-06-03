@@ -19,6 +19,8 @@ namespace Raying {
 		virtual void Resize(float width, float height) override;
 		virtual int ReadPixed(uint32_t attachmentIndex, int x, int y) override;
 
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
+
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { Raying_Core_Assert(index < _colorAttachments.size()); return _colorAttachments[index]; }
 		virtual const FramebufferSpecification& GetSpecification() const override { return _specification; }
 

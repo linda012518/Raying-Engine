@@ -114,6 +114,8 @@ namespace Raying {
 			_fbo->Bind();
 			RendererCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RendererCommand::Clear();
+
+			_fbo->ClearAttachment(1, -1);
 		}
 
 		_activeScene->OnUpdateEditor(ts, _editorCamera);

@@ -76,6 +76,18 @@ namespace Raying {
 			return false;
 		}
 
+		static GLenum RayingFBOTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+				case Raying::FramebufferTextureFormat::RGBA8: return GL_RGBA8;
+				case Raying::FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			Raying_Core_Assert(false);
+			return 0;
+		}
+
 	}
 
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification & spec)
@@ -213,6 +225,16 @@ namespace Raying {
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		Raying_Core_Assert(attachmentIndex < _colorAttachments.size());
+
+		auto& spec = _colorAttachmentSpecifications[attachmentIndex];
+		//清空Texture为指定的值
+		glClearTexImage(_colorAttachments[attachmentIndex], 0, Utils::RayingFBOTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+
 	}
 
 }
