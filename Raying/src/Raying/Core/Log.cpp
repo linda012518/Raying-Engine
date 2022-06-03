@@ -18,7 +18,7 @@ namespace Raying {
 		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
 		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
 
-		_coreLogger = std::make_shared<spdlog::logger>("HAZEL", begin(logSinks), end(logSinks));
+		_coreLogger = std::make_shared<spdlog::logger>("Raying", begin(logSinks), end(logSinks));
 		spdlog::register_logger(_coreLogger);
 		_coreLogger->set_level(spdlog::level::trace);
 		_coreLogger->flush_on(spdlog::level::trace);

@@ -24,7 +24,7 @@ namespace Raying {
 		_texture = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FramebufferSpecification spec;
-		spec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		spec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		spec.Width = 1280;
 		spec.Height = 720;
 
@@ -117,6 +117,20 @@ namespace Raying {
 		}
 
 		_activeScene->OnUpdateEditor(ts, _editorCamera);
+
+		auto[mx, my] = ImGui::GetMousePos();
+		mx -= _viewportBounds[0].x;
+		my -= _viewportBounds[0].y;
+		//Raying_Core_Trace("Pixed Data {0}，{1}", mx, my);
+		glm::vec2 viewportSize = _viewportBounds[1] - _viewportBounds[0];
+		my = viewportSize.y - my;
+		int mouseX = mx;
+		int mouseY = my;
+		if (mouseX > 0 && mouseY > 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixedData = _fbo->ReadPixed(1, mouseX, mouseY);
+			Raying_Core_Trace("Pixed Data {0}", pixedData);
+		}
 
 		_fbo->Unbind();
 	}
@@ -219,6 +233,8 @@ namespace Raying {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
+		auto viewportOffset = ImGui::GetCursorPos();//Viewport 窗口偏移 包含 tab栏
+
 		_viewportFocused = ImGui::IsWindowFocused();
 		_viewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->BlockEvents(!_viewportFocused && !_viewportHovered);
@@ -228,6 +244,15 @@ namespace Raying {
 
 		uint64_t textureID = _fbo->GetColorAttachmentRendererID();
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ _viewportSize.x, _viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		auto windowSize = ImGui::GetWindowSize();//Viewport的大小
+		ImVec2 minBound = ImGui::GetWindowPos();//Viewport全屏位置
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		ImVec2 maxBound = { minBound.x + windowSize.x, minBound.y + windowSize.y };
+		_viewportBounds[0] = { minBound.x, minBound.y };
+		_viewportBounds[1] = { maxBound.x, maxBound.y };
 
 		Entity selectedEntity = _sceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity && _gizmoType != -1)
