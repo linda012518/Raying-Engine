@@ -38,6 +38,7 @@ namespace Raying {
 		Entity _squareEntity;
 		Entity _cameraEntity;
 		Entity _secondCameraEntity;
+		Entity _hoverdEntity;
 
 		bool _primoryCamera = true;
 

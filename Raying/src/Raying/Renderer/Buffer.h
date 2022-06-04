@@ -13,7 +13,7 @@ namespace Raying {
 
 	enum class Raying_API ShaderAttribute
 	{
-		Position = 0, Color, Normal, UV1, UV2, UV3, UV4, UV5, UV6, TilingFactor, TexIndex
+		Position = 0, Color, Normal, UV1, UV2, UV3, UV4, UV5, UV6, TilingFactor, TexIndex, EntityID
 	};
 
 	static uint32_t ShaderDataTypeSize(ShaderDataType type)

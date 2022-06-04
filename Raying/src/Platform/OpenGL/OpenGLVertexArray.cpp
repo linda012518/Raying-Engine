@@ -89,7 +89,7 @@ namespace Raying {
 				glVertexAttribIPointer(
 					element.Index, element.GetComponentCount(),
 					ShaderDataTypeToOpenGLBaseType(element.Type),
-					layout.GetStride(), (const void*)(intptr_t)element.Offset);
+					layout.GetStride(), (const void*)element.Offset);
 				break;
 			}
 			case ShaderDataType::Mat3:
@@ -112,14 +112,6 @@ namespace Raying {
 			default:
 				Raying_Core_Assert(false, "Unknown ShaderDataType!");
 			}
-
-
-			glEnableVertexAttribArray(element.Index);
-			glVertexAttribPointer(
-				element.Index, element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(), (const void*)(intptr_t)element.Offset);
 		}
 
 		_vertexBuffers.push_back(buffer);

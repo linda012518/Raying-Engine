@@ -132,6 +132,8 @@ namespace Raying {
 		{
 			int pixedData = _fbo->ReadPixed(1, mouseX, mouseY);
 			Raying_Core_Trace("Pixed Data {0}", pixedData);
+			_hoverdEntity = pixedData == -1 ? Entity() : Entity((entt::entity)pixedData, _activeScene.get());
+			int a = 0;
 		}
 
 		_fbo->Unbind();
@@ -222,6 +224,11 @@ namespace Raying {
 		_sceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
+
+		std::string name = "None";
+		if (_hoverdEntity)
+			name = _hoverdEntity.GetComponent<TagComponent>().Tag;
+		ImGui::Text("Hoverd Entity: %s", name.c_str());
 
 		auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");

@@ -16,6 +16,8 @@ namespace Raying {
 		glm::vec4 Color;
 		float TilingFactor;
 		float TexIndex;
+
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -56,7 +58,8 @@ namespace Raying {
 			{ShaderAttribute::UV1, ShaderDataType::Float2},
 			{ShaderAttribute::Color, ShaderDataType::Float4},
 			{ShaderAttribute::TilingFactor, ShaderDataType::Float},
-			{ShaderAttribute::TexIndex, ShaderDataType::Float}
+			{ShaderAttribute::TexIndex, ShaderDataType::Float},
+			{ShaderAttribute::EntityID, ShaderDataType::Int}
 			});
 		_data.VAO->AddVertexBuffer(_data.VBO);
 
@@ -192,7 +195,7 @@ namespace Raying {
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4 & transform, const glm::vec4 & color)
+	void Renderer2D::DrawQuad(const glm::mat4 & transform, const glm::vec4 & color, int entityID)
 	{
 		Raying_Profile_FUNCTION();
 
@@ -211,6 +214,7 @@ namespace Raying {
 			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
 			_data.QuadVertexBufferPtr->TexIndex = texIndex;
 			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			_data.QuadVertexBufferPtr->EntityID = entityID;
 			_data.QuadVertexBufferPtr++;
 		}
 
@@ -219,7 +223,7 @@ namespace Raying {
 		_data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4 & transform, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor)
+	void Renderer2D::DrawQuad(const glm::mat4 & transform, const Ref<Texture2D> texture, float tilingFactor, const glm::vec4 & tintColor, int entityID)
 	{
 		Raying_Profile_FUNCTION();
 
@@ -256,6 +260,7 @@ namespace Raying {
 			_data.QuadVertexBufferPtr->Texcoord = texcoords[i];
 			_data.QuadVertexBufferPtr->TexIndex = texIndex;
 			_data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			_data.QuadVertexBufferPtr->EntityID = entityID;
 			_data.QuadVertexBufferPtr++;
 		}
 
@@ -290,6 +295,11 @@ namespace Raying {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, texture, tilingFactor, tintColor);
+	}
+
+	void Renderer2D::DrawSprite(const glm::mat4 & transform, SpriteRendererComponent & src, int entityID)
+	{
+		DrawQuad(transform, src.Color, entityID);
 	}
 
 	void Renderer2D::ResetStats()
