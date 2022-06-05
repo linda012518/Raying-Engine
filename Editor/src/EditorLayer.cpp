@@ -131,9 +131,7 @@ namespace Raying {
 		if (mouseX > 0 && mouseY > 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			int pixedData = _fbo->ReadPixed(1, mouseX, mouseY);
-			Raying_Core_Trace("Pixed Data {0}", pixedData);
 			_hoverdEntity = pixedData == -1 ? Entity() : Entity((entt::entity)pixedData, _activeScene.get());
-			int a = 0;
 		}
 
 		_fbo->Unbind();
@@ -332,6 +330,7 @@ namespace Raying {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(Raying_Bind_Event_Fn(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(Raying_Bind_Event_Fn(EditorLayer::OnMouseButtonPressed));
 	}
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent & e)
@@ -390,6 +389,16 @@ namespace Raying {
 		}
 
 		return true;
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent & e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			if (_viewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				_sceneHierarchyPanel.SetSelectedEntity(_hoverdEntity);
+		}
+		return false;
 	}
 
 	void EditorLayer::NewScene()
