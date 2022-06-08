@@ -1,4 +1,5 @@
 include "./vendor/premake/premake_customization/solution_items.lua"
+include "Dependencies.lua"
 
 workspace "Raying Engine"
 	architecture "x64"
@@ -22,17 +23,6 @@ workspace "Raying Engine"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
--- Include directories relative to root folder (solution directory)
-IncludeDir = {}
-IncludeDir["GLFW"] = "%{wks.location}/Raying/vendor/GLFW/include"
-IncludeDir["GLAD"] = "%{wks.location}/Raying/vendor/GLAD/include"
-IncludeDir["ImGui"] = "%{wks.location}/Raying/vendor/imgui"
-IncludeDir["glm"] = "%{wks.location}/Raying/vendor/glm"
-IncludeDir["stb_image"] = "%{wks.location}/Raying/vendor/stb_image"
-IncludeDir["entt"] = "%{wks.location}/Raying/vendor/entt/include"
-IncludeDir["yaml"] = "%{wks.location}/Raying/vendor/yaml-cpp/include"
-IncludeDir["ImGuizmo"] = "%{wks.location}/Raying/vendor/ImGuizmo"
 
 group "Dependencies"
 	include "vendor/premake"

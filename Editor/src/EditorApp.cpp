@@ -8,8 +8,8 @@ namespace Raying {
 	class RayingEditor : public Application
 	{
 	public:
-		RayingEditor()
-			: Application("Raying Editor")
+		RayingEditor(ApplicationCommandLineArgs args)
+			: Application("Raying Editor", args)
 		{
 			PushLayer(new EditorLayer());
 		}
@@ -21,8 +21,8 @@ namespace Raying {
 
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
-		return new RayingEditor();
+		return new RayingEditor(args);
 	}
 }

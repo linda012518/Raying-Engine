@@ -3,9 +3,11 @@
 
 #include "VertexArray.h"
 #include "Shader.h"
+#include "UniformBuffer.h"
 #include "RendererCommand.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Raying {
 
@@ -42,6 +44,13 @@ namespace Raying {
 		glm::vec4 QuadVertexPositions[4];
 
 		Renderer2D::Statistics Stats;
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 	static Renderer2DData _data;
@@ -95,8 +104,8 @@ namespace Raying {
 			samplers[i] = i;
 
 		_data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		_data.TextureShader->Bind();
-		_data.TextureShader->SetIntArray("u_Textures", samplers, _data.MaxTextureSlots);
+		//_data.TextureShader->Bind();
+		//_data.TextureShader->SetIntArray("u_Textures", samplers, _data.MaxTextureSlots);
 
 		_data.TextureSlots[0] = _data.WhiteTexture;
 
@@ -105,6 +114,8 @@ namespace Raying {
 		_data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
 		_data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		_data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
+		_data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -118,8 +129,11 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		_data.TextureShader->Bind();
-		_data.TextureShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
+		//_data.TextureShader->Bind();
+		//_data.TextureShader->SetMat4("_ViewProjection", camera.GetVPMatrix());
+
+		_data.CameraBuffer.ViewProjection = camera.GetVPMatrix();
+		_data.CameraUniformBuffer->SetData(&_data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -128,8 +142,11 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		_data.TextureShader->Bind();
-		_data.TextureShader->SetMat4("_ViewProjection", camera.GetProjection() * glm::inverse(transform));
+		//_data.TextureShader->Bind();
+		//_data.TextureShader->SetMat4("_ViewProjection", camera.GetProjection() * glm::inverse(transform));
+
+		_data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		_data.CameraUniformBuffer->SetData(&_data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -138,8 +155,10 @@ namespace Raying {
 	{
 		Raying_Profile_FUNCTION();
 
-		_data.TextureShader->Bind();
-		_data.TextureShader->SetMat4("_ViewProjection", camera.GetViewProjection());
+		//_data.TextureShader->Bind();
+		//_data.TextureShader->SetMat4("_ViewProjection", camera.GetViewProjection());
+		_data.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		_data.CameraUniformBuffer->SetData(&_data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -161,6 +180,8 @@ namespace Raying {
 
 		for (uint32_t i = 0; i < _data.TextureSlotIndex; i++)
 			_data.TextureSlots[i]->Bind(i);
+
+		_data.TextureShader->Bind();
 
 		RendererCommand::DrawIndexed(_data.VAO, _data.QuadIndexCount);
 

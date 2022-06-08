@@ -161,7 +161,8 @@ namespace Raying {
 	template<>
 	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{
-		component.Camera.SetViewportSize(_width, _height);
+		if (_width > 0 && _height > 0)
+			component.Camera.SetViewportSize(_width, _height);
 	}
 
 	template<>

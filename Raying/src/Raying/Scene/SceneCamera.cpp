@@ -30,6 +30,7 @@ namespace Raying {
 
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
+		Raying_Core_Assert(width > 0 && height > 0);
 		_aspectRatio = (float)width / (float)height;
 		RecalculateProjection();
 	}

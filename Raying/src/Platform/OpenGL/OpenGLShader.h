@@ -40,10 +40,20 @@ namespace Raying {
 	private:
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<unsigned int, std::string> PreProcess(const std::string& source);
-		void Compile(const std::unordered_map<unsigned int, std::string>& shaderSources);
+
+		void CompileOrGetVulkanBinaries(const std::unordered_map<unsigned int, std::string>& shaderSources);
+		void CompileOrGetOpenGLBinaries();
+		void CreateProgram();
+		void Reflect(unsigned int stage, const std::vector<uint32_t>& shaderData);
 	private:
 		uint32_t m_RendererID;
+		std::string _filePath;
 		std::string _name;
+
+		std::unordered_map<unsigned int, std::vector<uint32_t>> _vulkanSPIRV;
+		std::unordered_map<unsigned int, std::vector<uint32_t>> _openGLSPIRV;
+
+		std::unordered_map<unsigned int, std::string> _openGLSourceCode;
 	};
 
 }

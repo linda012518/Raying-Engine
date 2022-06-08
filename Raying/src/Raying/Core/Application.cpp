@@ -11,7 +11,8 @@ namespace Raying
 {
 	Application* Application::_instance = nullptr;
 
-	Application::Application(const std::string& name)
+	Application::Application(const std::string& name, ApplicationCommandLineArgs args)
+		: _commandLineArgs(args)
 	{
 		Raying_Profile_FUNCTION();
 

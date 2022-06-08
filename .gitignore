@@ -7,6 +7,7 @@
 *.filters
 *.user
 *.log
+Raying/vendor/VulkanSDK
 
 RayingProfile-Runtime.json
 RayingProfile-Shutdown.json

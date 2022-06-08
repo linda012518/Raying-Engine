@@ -15,10 +15,22 @@ int main(int argc, char** argv);
 
 namespace Raying {
 
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator [](int index) const
+		{
+			Raying_Core_Assert(index < Count);
+			return Args[index];
+		}
+	};
+
 	class Raying_API Application
 	{
 	public:
-		Application(const std::string& name = "Raying App");
+		Application(const std::string& name = "Raying App", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
 		virtual ~Application();
 
 		void OnEvent(Event& e);
@@ -32,13 +44,16 @@ namespace Raying {
 
 		ImGuiLayer* GetImGuiLayer() { return _imguiLayer; }
 
-		inline static Application& Get() { return *_instance; }
+		static Application& Get() { return *_instance; }
+
+		ApplicationCommandLineArgs GetCommandLineArgs() const { return _commandLineArgs; }
 	private:
 		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
+		ApplicationCommandLineArgs _commandLineArgs;
 		Scope<Window> _window;//unique_ptr 独占所指向的对象
 		ImGuiLayer* _imguiLayer;
 		bool _running = true;
@@ -51,5 +66,5 @@ namespace Raying {
 		friend int ::main(int argc, char** argv);
 	};
 
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 }
