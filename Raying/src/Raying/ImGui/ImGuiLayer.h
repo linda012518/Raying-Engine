@@ -27,7 +27,6 @@ namespace Raying
 		void SetDarkThemeColors();
 	private:
 		bool _blockEvents = true;
-		float _time = 0.0f;
 	};
 }
 

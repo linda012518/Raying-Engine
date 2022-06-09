@@ -13,7 +13,7 @@
 class Sandbox : public Raying::Application
 {
 public:
-	Sandbox()
+	Sandbox(Raying::ApplicationCommandLineArgs args)
 	{
 		//PushLayer(new ExampleLayer());
 		PushLayer(new Sandbox2D());
@@ -26,7 +26,7 @@ public:
 
 };
 
-Raying::Application* Raying::CreateApplication()
+Raying::Application* Raying::CreateApplication(Raying::ApplicationCommandLineArgs args)
 {
-	return new Sandbox();
+	return new Sandbox(args);
 }
