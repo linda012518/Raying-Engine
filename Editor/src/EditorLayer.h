@@ -2,6 +2,7 @@
 
 #include <Raying.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 #include "Raying/Renderer/EditorCamera.h"
 
 namespace Raying {
@@ -58,6 +59,7 @@ namespace Raying {
 		int _gizmoType = -1;
 
 		SceneHierarchyPanel _sceneHierarchyPanel;
+		ContentBrowserPanel _contentBrowserPanel;
 
 		std::string _currentScenePath = std::string();
 	};

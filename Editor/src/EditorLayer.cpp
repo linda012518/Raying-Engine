@@ -228,6 +228,7 @@ namespace Raying {
 		}
 
 		_sceneHierarchyPanel.OnImGuiRender();
+		_contentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Stats");
 
