@@ -12,6 +12,8 @@
 
 namespace Raying {
 
+	extern const std::filesystem::path _assetPath;
+
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), _cameraCtrl(1280.0f / 720.0f, true)
 	{
@@ -266,6 +268,16 @@ namespace Raying {
 		uint64_t textureID = _fbo->GetColorAttachmentRendererID();
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ _viewportSize.x, _viewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content_Browser_Item"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(std::filesystem::path(_assetPath) / path);
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		//auto windowSize = ImGui::GetWindowSize();//Viewport的大小
 		//ImVec2 minBound = ImGui::GetWindowPos();//Viewport全屏位置
 		//minBound.x += viewportOffset.x;
@@ -424,15 +436,20 @@ namespace Raying {
 		std::string filepath = FileDialogs::OpenFile("Raying Scene (*.linda)\0*.linda\0");
 		if (!filepath.empty())
 		{
-			_activeScene = CreateRef<Scene>();
-			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
-			_sceneHierarchyPanel.SetContext(_activeScene);
-
-			SceneSerializer serialize(_activeScene);
-			serialize.DeSerialize(filepath);
-
-			_currentScenePath = filepath;
+			OpenScene(filepath);
 		}
+	}
+
+	void EditorLayer::OpenScene(const std::filesystem::path & path)
+	{
+		_activeScene = CreateRef<Scene>();
+		_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+		_sceneHierarchyPanel.SetContext(_activeScene);
+
+		SceneSerializer serialize(_activeScene);
+		serialize.DeSerialize(path.string());
+
+		_currentScenePath = path.string();
 	}
 
 	void EditorLayer::SaveScene()

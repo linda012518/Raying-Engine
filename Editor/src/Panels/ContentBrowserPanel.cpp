@@ -4,7 +4,7 @@
 
 namespace Raying {
 
-	static const std::filesystem::path _assetPath = "assets";
+	extern const std::filesystem::path _assetPath = "assets";
 
 	ContentBrowserPanel::ContentBrowserPanel()
 		: _currentDir(_assetPath)
@@ -42,8 +42,18 @@ namespace Raying {
 			auto relativePath = std::filesystem::relative(path, _assetPath);
 			std::string filenameString = relativePath.filename().string();
 
+			ImGui::PushID(filenameString.c_str());
 			Ref<Texture2D> icon = directoryEntry.is_directory() ? _dirIcon : _fileIcon;
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			if (ImGui::BeginDragDropSource())
+			{
+				const wchar_t* itemPath = relativePath.c_str();
+				ImGui::SetDragDropPayload("Content_Browser_Item", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
+			ImGui::PopStyleColor();
 
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
@@ -53,6 +63,8 @@ namespace Raying {
 			ImGui::TextWrapped(filenameString.c_str());
 
 			ImGui::NextColumn();
+
+			ImGui::PopID();
 		}
 
 		ImGui::Columns(1);
