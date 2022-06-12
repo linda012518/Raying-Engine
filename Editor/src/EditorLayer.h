@@ -30,6 +30,11 @@ namespace Raying {
 		void SaveScene();
 		void SaveSceneAs();
 
+		void OnScenePlay();
+		void OnSceneStop();
+
+		void UI_Toolbar();
+
 	private:
 		OrthographicCameraController _cameraCtrl;
 
@@ -59,8 +64,17 @@ namespace Raying {
 
 		int _gizmoType = -1;
 
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+
+		SceneState _sceneState = SceneState::Edit;
+
 		SceneHierarchyPanel _sceneHierarchyPanel;
 		ContentBrowserPanel _contentBrowserPanel;
+
+		Ref<Texture2D> _iconPlay, _iconStop;
 
 		std::string _currentScenePath = std::string();
 	};

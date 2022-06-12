@@ -24,6 +24,8 @@ namespace Raying {
 		Raying_Profile_FUNCTION();
 
 		_texture = Texture2D::Create("assets/textures/Checkerboard.png");
+		_iconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
+		_iconStop = Texture2D::Create("Resources/Icons/StopButton.png");
 
 		FramebufferSpecification spec;
 		spec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -112,11 +114,6 @@ namespace Raying {
 			_editorCamera.SetViewportSize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
 		}
 
-		if (_viewportFocused)
-			_cameraCtrl.OnUpdate(ts);
-
-		_editorCamera.OnUpdate(ts);
-
 		// Render
 		Renderer2D::ResetStats();
 		{
@@ -128,7 +125,24 @@ namespace Raying {
 			_fbo->ClearAttachment(1, -1);
 		}
 
-		_activeScene->OnUpdateEditor(ts, _editorCamera);
+		
+		switch (_sceneState)
+		{
+			case SceneState::Edit:
+			{
+				if (_viewportFocused)
+					_cameraCtrl.OnUpdate(ts);
+
+				_editorCamera.OnUpdate(ts);
+				_activeScene->OnUpdateEditor(ts, _editorCamera);
+				break;
+			}
+			case SceneState::Play:
+			{
+				_activeScene->OnUpdateRuntime(ts);
+				break;
+			}
+		}
 
 		auto[mx, my] = ImGui::GetMousePos();
 		mx -= _viewportBounds[0].x;
@@ -340,6 +354,8 @@ namespace Raying {
 		ImGui::End();
 		ImGui::PopStyleVar();
 
+		UI_Toolbar();
+
 		ImGui::End();
 
 	}
@@ -472,6 +488,44 @@ namespace Raying {
 			serialize.Serialize(filepath);
 			_currentScenePath = filepath;
 		}
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		_sceneState = SceneState::Play;
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		_sceneState = SceneState::Edit;
+	}
+
+	void EditorLayer::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Texture2D> icon = _sceneState == SceneState::Edit ? _iconPlay : _iconStop;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		{
+			if (_sceneState == SceneState::Edit)
+				OnScenePlay();
+			else if (_sceneState == SceneState::Play)
+				OnSceneStop();
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
 	}
 
 }
