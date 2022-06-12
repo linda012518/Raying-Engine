@@ -40,6 +40,11 @@ namespace Raying {
 			Raying_Core_Assert(data, "Failed to load image!");
 		}
 
+		if (nullptr == data)
+			return;
+
+		_isLoaded = true;
+
 		_width = width;
 		_height = height;
 

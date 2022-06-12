@@ -458,12 +458,19 @@ namespace Raying {
 
 	void EditorLayer::OpenScene(const std::filesystem::path & path)
 	{
-		_activeScene = CreateRef<Scene>();
-		_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
-		_sceneHierarchyPanel.SetContext(_activeScene);
-
-		SceneSerializer serialize(_activeScene);
-		serialize.DeSerialize(path.string());
+		if (path.extension().string() != ".linda")
+		{
+			Raying_Warn("Could not load {0} -- not a scene file!", path.filename().string());
+			return;
+		}
+		Ref<Scene> newScene = CreateRef<Scene>();
+		SceneSerializer serialize(newScene);
+		if (serialize.DeSerialize(path.string()))
+		{
+			_activeScene = newScene;
+			_activeScene->OnViewportResize((uint32_t)_viewportSize.x, (uint32_t)_viewportSize.y);
+			_sceneHierarchyPanel.SetContext(_activeScene);
+		}
 
 		_currentScenePath = path.string();
 	}

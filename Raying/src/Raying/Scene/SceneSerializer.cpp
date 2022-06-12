@@ -182,7 +182,16 @@ namespace Raying {
 
 	bool SceneSerializer::DeSerialize(const std::string & filepath)
 	{
-		YAML::Node data = YAML::LoadFile(filepath);
+		YAML::Node data;
+		try
+		{
+			data = YAML::LoadFile(filepath);
+		}
+		catch (const std::exception&)
+		{
+			return false;
+		}
+
 		if (!data["Scene"])
 			return false;
 
