@@ -5,6 +5,8 @@
 
 #include "entt.hpp"
 
+class b2World;
+
 namespace Raying {
 
 	class Entity;
@@ -20,6 +22,9 @@ namespace Raying {
 
 		entt::registry& Reg() { return _registry; }
 
+		void OnRuntimeStart();
+		void OnRuntimeStop();
+
 		void OnUpdateRuntime(Timestep ts);
 		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
@@ -33,6 +38,8 @@ namespace Raying {
 	private:
 		entt::registry _registry;
 		uint32_t _width = 0, _height = 0;
+
+		b2World* m_PhysicsWorld = nullptr;
 
 		friend class Entity;
 		friend class SceneSerializer;

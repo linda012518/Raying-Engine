@@ -1,11 +1,11 @@
 
--- Hazel Dependencies
 
 VULKAN_SDK = os.getenv("VULKAN_SDK")
 
 IncludeDir = {}
 IncludeDir["stb_image"] = "%{wks.location}/Raying/vendor/stb_image"
 IncludeDir["yaml"] = "%{wks.location}/Raying/vendor/yaml-cpp/include"
+IncludeDir["Box2D"] = "%{wks.location}/Raying/vendor/Box2D/include"
 IncludeDir["GLFW"] = "%{wks.location}/Raying/vendor/GLFW/include"
 IncludeDir["GLAD"] = "%{wks.location}/Raying/vendor/Glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/Raying/vendor/ImGui"
@@ -20,7 +20,7 @@ LibraryDir = {}
 
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
 LibraryDir["VulkanSDK_Debug"] = "%{wks.location}/Raying/vendor/VulkanSDK/Lib"
-LibraryDir["VulkanSDK_DebugDLL"] = "%{wks.location}/Hazel/vendor/VulkanSDK/Bin"
+LibraryDir["VulkanSDK_DebugDLL"] = "%{wks.location}/Raying/vendor/VulkanSDK/Bin"
 
 Library = {}
 Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"

@@ -32,6 +32,7 @@ project "Raying"
 	{
 		"src",
 		"vendor/spdlog/include",
+		"%{IncludeDir.Box2D}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.ImGui}",
@@ -45,6 +46,7 @@ project "Raying"
 
 	links 
 	{ 
+		"Box2D",
 		"GLFW",
 		"GLAD",
 		"ImGui",

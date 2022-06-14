@@ -26,6 +26,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
 	include "vendor/premake"
+	include "Raying/vendor/Box2D"
 	include "Raying/vendor/GLFW" --Include GLFW premake5.lua
 	include "Raying/vendor/GLAD" 
 	include "Raying/vendor/imgui"

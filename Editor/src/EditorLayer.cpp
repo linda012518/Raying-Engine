@@ -500,11 +500,13 @@ namespace Raying {
 	void EditorLayer::OnScenePlay()
 	{
 		_sceneState = SceneState::Play;
+		_activeScene->OnRuntimeStart();
 	}
 
 	void EditorLayer::OnSceneStop()
 	{
 		_sceneState = SceneState::Edit;
+		_activeScene->OnRuntimeStop();
 	}
 
 	void EditorLayer::UI_Toolbar()

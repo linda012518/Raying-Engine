@@ -16,3 +16,6 @@
 [submodule "Raying/vendor/ImGuizmo"]
 	path = Raying/vendor/ImGuizmo
 	url = https://github.com/TheCherno/ImGuizmo
+[submodule "Raying/vendor/Box2D"]
+	path = Raying/vendor/Box2D
+	url = https://github.com/TheCherno/box2d
